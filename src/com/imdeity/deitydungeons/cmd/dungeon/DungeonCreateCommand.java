@@ -30,6 +30,7 @@ public class DungeonCreateCommand extends DeityCommandReceiver {
 		
 		//Make the dungeon
 		DungeonManager.createDungeon(player, dungeon, players);
+		
 		return true;
 	}
 

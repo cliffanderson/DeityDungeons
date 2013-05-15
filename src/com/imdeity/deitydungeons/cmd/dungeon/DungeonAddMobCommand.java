@@ -27,24 +27,33 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 		}
 		
 		Dungeon dungeon = DungeonManager.dungeons.get(player);		
-		String mob = args[0];
+		String mobName = args[0];
 		String type = args[1];
+		EntityType entity = EntityType.fromName(type);
 		
-		if(EntityType.fromName(type) == null) {
+		//Is it an actual entity?
+		if(entity == null) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Invalid entity type");
 			return false;
 		}
 		
-		if(dungeon.hasMob(mob)) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " already has a mob named " + mob);
+		//Make sure the mob name is not already in use
+		if(dungeon.hasMob(mobName)) {
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " already has a mob named " + mobName);
+			return false;
+		}
+		
+		//Make sure the mob name is not too long for the database table
+		if(mobName.length() > 32) {
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Mob name too long!");
 			return false;
 		}
 		
 		//Finally everything has been checked and we can add the mob
-		//Mob mob = new Mob();
+		Mob mob = new Mob(mobName, entity, -1, -1, -1, -1, -1, dungeon);
+		DungeonManager.addMobToDungeon(mob);
 		
-		
-		return false;
+		return true;
 	}
 
 }

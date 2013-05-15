@@ -3,6 +3,7 @@ package com.imdeity.deitydungeons;
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityPlugin;
 import com.imdeity.deitydungeons.cmd.DungeonCommandHandler;
+import com.imdeity.deitydungeons.cmd.MobCommandHandler;
 
 public class DeityDungeons extends DeityPlugin {
 	
@@ -11,6 +12,7 @@ public class DeityDungeons extends DeityPlugin {
 	@Override
 	protected void initCmds() {
 		registerCommand(new DungeonCommandHandler("DeityDungeons", "dungeon"));
+		registerCommand(new MobCommandHandler("DeityDungeons", "mob"));
 	}
 	
 	@Override
@@ -27,6 +29,8 @@ public class DeityDungeons extends DeityPlugin {
 				"`yaw` INT (8) NOT NULL, `pitch` INT (8) NOT NULL," +
 				
 				"`mob_x` INT (8) NOT NULL, `mob_y` INT (8) NOT NULL, `mob_z` INT (8) NOT NULL)", DungeonManager.DUNGEON_LIST);
+		
+		DungeonManager.loadAllDungeons();
 	}
 	
 	@Override

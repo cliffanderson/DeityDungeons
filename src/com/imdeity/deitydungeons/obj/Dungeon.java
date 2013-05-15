@@ -22,8 +22,12 @@ public class Dungeon {
 		return DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE ? SET `name`=?", DungeonManager.DUNGEON_LIST, s);
 	}
 	
-	public void add(Mob mob) {
+	public void addMob(Mob mob) {
 		mobs.add(mob);
+	}
+	
+	public void removeMob(Mob mob) {
+		mobs.remove(mob);
 	}
 	
 	public boolean hasMob(String name) {
@@ -33,5 +37,14 @@ public class Dungeon {
 			}
 		}
 		return false;
+	}
+	
+	public Mob getMobByName(String name) {
+		for(Mob mob : mobs) {
+			if(mob.getName().equals(name)) {
+				return mob;
+			}
+		}
+		return null;
 	}
 }
