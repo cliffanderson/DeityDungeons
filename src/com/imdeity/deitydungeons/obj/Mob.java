@@ -1,14 +1,16 @@
 package com.imdeity.deitydungeons.obj;
 
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 public class Mob {
 	String name;
 	EntityType type;
-	int health, helm, chest, pants, feet;
+	int health, helm, chest, pants, feet, x, y, z;
 	Dungeon dungeon;
+	Location location;
 	
-	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon) {
+	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z) {
 		this.name = name;
 		this.type = type;
 		this.health = health;
@@ -17,6 +19,40 @@ public class Mob {
 		this.pants = pants;
 		this.feet = feet;
 		this.dungeon = dungeon;
+		
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		
+		location = new Location(dungeon.getWorld(), x, y, z);
+	}
+	
+	public Location getLocation() {
+		return location;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public int getZ() {
+		return z;
+	}
+	
+	public void setZ(int z) {
+		this.z = z;
 	}
 	
 	public String getName() {

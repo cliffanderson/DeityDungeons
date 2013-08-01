@@ -17,18 +17,24 @@ public class MobSelectCommand extends DeityCommandReceiver {
 
 	@Override
 	public boolean onPlayerRunCommand(Player player, String[] args) {
+		System.out.println("entered " + args[0]);
 		if(args.length != 1) return false;
 		String mobName = args[0];
 		
 		if(DungeonManager.selectedDungeons.get(player) == null) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must have a dungeon selected to select a mob");
-			return false;
+			return true;
+		}
+		
+		System.out.println("list of mobs");
+		for(Mob mob : DungeonManager.selectedDungeons.get(player).mobs) {
+			System.out.println(mob.getName());
 		}
 		
 		Dungeon dungeon = DungeonManager.selectedDungeons.get(player);
 		if(!dungeon.hasMob(mobName)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "That mob does not exist!");
-			return false;
+			return true;
 		}
 		Mob mob = dungeon.getMobByName(mobName);
 		

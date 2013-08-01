@@ -2,16 +2,43 @@ package com.imdeity.deitydungeons.obj;
 
 import java.util.ArrayList;
 
-import com.imdeity.deityapi.DeityAPI;
-import com.imdeity.deitydungeons.DungeonManager;
+import org.bukkit.Location;
+import org.bukkit.World;
 
+import com.imdeity.deityapi.DeityAPI;
+
+//Class to store all dungeon data in memory
 public class Dungeon {
 	
-	ArrayList<Mob> mobs = new ArrayList<Mob>();
-	String name;
+	public ArrayList<Mob> mobs = new ArrayList<Mob>();
 	
-	public Dungeon(String name) {
+	String name;
+	int numberOfPlayers;
+	World world;
+	int x;
+	int y;
+	int z;
+	int yaw;
+	int pitch;
+	Location location;
+	
+	public Dungeon(String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch) {
 		this.name = name;
+		this.numberOfPlayers = numberOfPlayers;
+		this.world = world;
+		/*
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.yaw = yaw;
+		this.pitch = pitch;
+		*/
+		
+		location = new Location(world, x, y, z, yaw, pitch);
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 	
 	public String getName() {
@@ -19,7 +46,7 @@ public class Dungeon {
 	}
 	
 	public boolean setName(String s) {
-		return DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE ? SET `name`=?", DungeonManager.DUNGEON_LIST, s);
+		return DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_list` SET `name`=? WHERE `name`=?", s, name);
 	}
 	
 	public void addMob(Mob mob) {

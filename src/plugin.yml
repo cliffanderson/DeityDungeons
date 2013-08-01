@@ -1,0 +1,10 @@
+name: DeityDungeons
+version: 0.1
+author: [Cliff777]
+depend: [DeityAPI]
+main: com.imdeity.deitydungeons.DeityDungeons
+commands:
+    dungeon:
+        aliases: [d]
+    mob:
+        aliases: [m]
