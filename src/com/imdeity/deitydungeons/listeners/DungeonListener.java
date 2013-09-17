@@ -18,9 +18,14 @@ public class DungeonListener extends DeityListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		//Don't want players to respawn in dungeons
-		for(RunningDungeon rd : DeityDungeons.runningDungeons) {
+		for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
 			if(rd.containsPlayer(player)) {
 				event.getPlayer().teleport(Bukkit.getServer().getWorld("world").getSpawnLocation());
+				rd.removePlayer(player);
+				
+				if(!rd.hasPlayers()) {
+					rd.removeAllMobs();
+				}
 			}
 		}
 		//TODO: ok?
@@ -31,21 +36,20 @@ public class DungeonListener extends DeityListener {
 		LivingEntity entity = event.getEntity();
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
-			for(RunningDungeon rd : DeityDungeons.runningDungeons) {
+			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
 				if(rd.containsPlayer(player)) {
 					rd.notifyDeath(player);
+					break;
 				}
 			}
 		}else{
 			Entity e = (Entity) entity;
-			for(RunningDungeon rd : DeityDungeons.runningDungeons) {
+			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
 				if(rd.containsMob(e)) {
 					rd.notifyDeathOfMob(e);
+					break;
 				}
 			}
 		}
-	}
-	
-	
-	
+	}	
 }

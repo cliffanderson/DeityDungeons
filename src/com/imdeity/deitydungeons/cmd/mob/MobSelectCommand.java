@@ -26,19 +26,19 @@ public class MobSelectCommand extends DeityCommandReceiver {
 			return true;
 		}
 		
-		System.out.println("list of mobs");
-		for(Mob mob : DungeonManager.selectedDungeons.get(player).mobs) {
-			System.out.println(mob.getName());
-		}
-		
 		Dungeon dungeon = DungeonManager.selectedDungeons.get(player);
+		
 		if(!dungeon.hasMob(mobName)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "That mob does not exist!");
 			return true;
 		}
 		Mob mob = dungeon.getMobByName(mobName);
 		
+		
+		
 		DungeonManager.selectedMobs.put(player, mob);
+		
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have selected the mob " + mob.getName());
 		
 		return true;
 	}

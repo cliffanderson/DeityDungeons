@@ -23,7 +23,7 @@ public class MobSetSpawn extends DeityCommandReceiver {
 		//Make sure the player has a selected mob
 		if(!DungeonManager.playerHasMob(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must first select a mob.");
-			return false;
+			return true;
 		}
 		
 		//Get the mob
@@ -34,14 +34,9 @@ public class MobSetSpawn extends DeityCommandReceiver {
 		int z = player.getLocation().getBlockZ();
 		
 		//Database
-		DungeonManager.setMobAttribute(mob, "x", x);
-		DungeonManager.setMobAttribute(mob, "y", y);
-		DungeonManager.setMobAttribute(mob, "z", z);
+		DungeonManager.setMobSpawn(mob, x, y, z);
 		
-		//Memory
-		mob.setX(x);
-		mob.setY(y);
-		mob.setZ(z);
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The spawn for mob " + mob.getName() + " has been set to your location.");
 
 		return true;
 	}

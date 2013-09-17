@@ -25,11 +25,13 @@ public class DungeonCreateCommand extends DeityCommandReceiver {
 		//Make sure there isn't an existing dungeon
 		if(DungeonManager.dungeonExists(dungeon)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeon", "The dungeon " + dungeon + " already exists");
-			return false;
+			return true;
 		}
 		
 		//Make the dungeon
 		DungeonManager.createDungeon(player, dungeon, players);
+		
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon + " has been created. The player spawn point has been set to your location.");
 		
 		return true;
 	}

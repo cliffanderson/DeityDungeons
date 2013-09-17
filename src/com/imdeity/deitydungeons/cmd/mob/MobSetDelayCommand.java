@@ -8,10 +8,11 @@ import com.imdeity.deitydungeons.DeityDungeons;
 import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.Mob;
 
-public class MobSetHealthCommand extends DeityCommandReceiver {
+public class MobSetDelayCommand extends DeityCommandReceiver {
 
 	@Override
-	public boolean onConsoleRunCommand(String[] args) {
+	public boolean onConsoleRunCommand(String[] arg0) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -20,24 +21,25 @@ public class MobSetHealthCommand extends DeityCommandReceiver {
 		if(args.length != 1) {
 			return false;
 		}
-		
+				
 		if(!DungeonManager.playerHasMob(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must first select a mob.");
-			return true;
+			return false;
 		}
 		
-		if(!DeityDungeons.isInt(args[0]) || Integer.parseInt(args[0]) == 0) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must input a valid number for the health!");
-			return true;
+		if(!DeityDungeons.isInt(args[0])) {
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "That is not a valid delay value.");
+			return false;
 		}
 		
-		int health = Integer.parseInt(args[0]);
+		int delay = Integer.parseInt(args[0]);
 		
 		Mob mob = DungeonManager.getPlayersMob(player);
 		
-		DungeonManager.setMobHealth(mob, health);
-				
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The health for mob " + mob.getName() + " has been set to " + health + "(" + (float) health / 2 + ") hearts");
+		DungeonManager.setMobDelay(DungeonManager.getPlayersMob(player), Integer.parseInt(args[0]));
+		
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The delay for mob " + mob.getName() + " has been set to " + delay);
+		
 		return true;
 	}
 

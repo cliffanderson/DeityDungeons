@@ -4,11 +4,12 @@ import org.bukkit.entity.Player;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityCommandReceiver;
-import com.imdeity.deitydungeons.DeityDungeons;
 import com.imdeity.deitydungeons.DungeonManager;
+import com.imdeity.deitydungeons.obj.ArmorMaterial;
+import com.imdeity.deitydungeons.obj.ArmorPiece;
 import com.imdeity.deitydungeons.obj.Mob;
 
-public class MobSetHealthCommand extends DeityCommandReceiver {
+public class MobSetLegsCommand extends DeityCommandReceiver {
 
 	@Override
 	public boolean onConsoleRunCommand(String[] args) {
@@ -23,22 +24,25 @@ public class MobSetHealthCommand extends DeityCommandReceiver {
 		
 		if(!DungeonManager.playerHasMob(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must first select a mob.");
-			return true;
+			return false;
 		}
 		
-		if(!DeityDungeons.isInt(args[0]) || Integer.parseInt(args[0]) == 0) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must input a valid number for the health!");
-			return true;
-		}
+		String materialName = args[0].toUpperCase();
+		ArmorMaterial material = ArmorMaterial.getByName(materialName);
 		
-		int health = Integer.parseInt(args[0]);
+		if(material == null) {
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Invalid material.");
+		}
 		
 		Mob mob = DungeonManager.getPlayersMob(player);
 		
-		DungeonManager.setMobHealth(mob, health);
-				
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The health for mob " + mob.getName() + " has been set to " + health + "(" + (float) health / 2 + ") hearts");
+		DungeonManager.setMobArmor(mob, material, ArmorPiece.LEGGINGS);
+
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have the set the leggings for the mob " + mob.getName() + " to " + material.getName().toLowerCase());
+
 		return true;
 	}
+
+	
 
 }

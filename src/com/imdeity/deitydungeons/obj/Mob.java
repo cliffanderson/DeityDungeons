@@ -1,16 +1,18 @@
 package com.imdeity.deitydungeons.obj;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 
 public class Mob {
 	String name;
 	EntityType type;
-	int health, helm, chest, pants, feet, x, y, z;
+	int health, helm, chest, pants, feet, x, y, z, delay;
 	Dungeon dungeon;
 	Location location;
+	World world;
 	
-	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z) {
+	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, int delay) {
 		this.name = name;
 		this.type = type;
 		this.health = health;
@@ -23,8 +25,11 @@ public class Mob {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.world = dungeon.getWorld();
 		
-		location = new Location(dungeon.getWorld(), x, y, z);
+		this.delay = delay;
+		
+		location = new Location(world, x, y, z);
 	}
 	
 	public Location getLocation() {
@@ -36,7 +41,7 @@ public class Mob {
 	}
 	
 	public void setX(int x) {
-		this.x = x;
+		location = new Location(world, x, y, z);
 	}
 
 	public int getY() {
@@ -44,7 +49,7 @@ public class Mob {
 	}
 	
 	public void setY(int y) {
-		this.y = y;
+		location = new Location(world, x, y, z);
 	}
 	
 	public int getZ() {
@@ -52,7 +57,7 @@ public class Mob {
 	}
 	
 	public void setZ(int z) {
-		this.z = z;
+		location = new Location(world, x, y, z);
 	}
 	
 	public String getName() {
@@ -119,5 +124,12 @@ public class Mob {
 		this.dungeon = dungeon;
 	}
 	
+	public int getDelay() {
+		return delay;
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
+	}
 	
 }

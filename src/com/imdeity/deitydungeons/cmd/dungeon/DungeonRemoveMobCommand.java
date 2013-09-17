@@ -21,7 +21,7 @@ public class DungeonRemoveMobCommand extends DeityCommandReceiver {
 		//Make sure the player has a selected dungeon
 		if(!DungeonManager.playerHasDungeon(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You first must select a dungeon");
-			return false;
+			return true;
 		}
 
 		//Get the dungeon
@@ -32,11 +32,13 @@ public class DungeonRemoveMobCommand extends DeityCommandReceiver {
 		//Make sure the mob name is in use
 		if(!dungeon.hasMob(mobName)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " does not have the mob " + mobName);
-			return false;
+			return true;
 		}
 
 		//Finally everything has been checked and we can remove the mob
 		DungeonManager.removeMobFromDungeon(dungeon.getMobByName(mobName), player);
+		
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The mob " + mobName + " has been removed from the dungeon " + dungeon.getName());
 
 		return true;
 	}

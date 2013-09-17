@@ -12,7 +12,16 @@ import com.imdeity.deitydungeons.obj.RunningDungeon;
 public class DeityDungeons extends DeityPlugin {
 	
 	public static DeityDungeons plugin;
-	public static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
+	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
+	private static ArrayList<String> runningDungeonNames = new ArrayList<String>();
+	
+	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
+		return runningDungeons;
+	}
+	
+	public static ArrayList<String> getRunningDungeonNames() {
+		return runningDungeonNames;
+	}
 	
 	@Override
 	protected void initCmds() {
@@ -28,10 +37,16 @@ public class DeityDungeons extends DeityPlugin {
 	@Override
 	protected void initDatabase() {
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_list` (" +
-				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` VARCHAR (64) NOT NULL, " +
-				"`number_of_players` INT (16) NOT NULL, `world` VARCHAR (64) NOT NULL," +
-				"`x` INT (8) NOT NULL, `y` INT (8) NOT NULL, `z` INT (8) NOT NULL," +
+				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
+				"`name` VARCHAR (64) NOT NULL, `number_of_players` INT (16) NOT NULL, `world` VARCHAR (64) NOT NULL," +
+				"`reward` INT (16) NOT NULL DEFAULT 50, `x` INT (8) NOT NULL, `y` INT (8) NOT NULL, `z` INT (8) NOT NULL," +
 				"`yaw` INT (8) NOT NULL, `pitch` INT (8) NOT NULL)");
+		
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_info` (" +
+				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
+				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL, `delay` INT (16) NOT NULL, " +
+				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
+				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL)");
 		
 		DungeonManager.loadAllDungeons();
 	}
@@ -68,9 +83,5 @@ public class DeityDungeons extends DeityPlugin {
 		}catch(Exception e) {
 			return false;
 		}
-	}
-
-	public static String tableName(String suffix) {
-		return "`dungeon_" + suffix + "`";
 	}
 }

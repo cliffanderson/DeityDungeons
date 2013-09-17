@@ -22,9 +22,9 @@ public class MobSetTypeCommand extends DeityCommandReceiver {
 		}
 		
 		//Make sure player has a selected mob
-		if(!DungeonManager.selectedMobs.containsKey(player)) {
+		if(!DungeonManager.playerHasMob(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You must first select a mob");
-			return false;
+			return true;
 		}
 		
 		//Check the type
@@ -33,11 +33,14 @@ public class MobSetTypeCommand extends DeityCommandReceiver {
 		
 		if(type == null) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Invalid entity!");
-			return false;
+			return true;
 		}
 		
 		//Finally
-		DungeonManager.setMobAttribute(DungeonManager.selectedMobs.get(player), "type",  type);
+		DungeonManager.setMobType(DungeonManager.selectedMobs.get(player), type);
+		
+		
+
 		return true;
 	}
 

@@ -23,7 +23,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 		//Make sure the player has a selected dungeon
 		if(!DungeonManager.playerHasDungeon(player)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You first must select a dungeon");
-			return false;
+			return true;
 		}
 		
 		Dungeon dungeon = DungeonManager.getPlayersDungeon(player);		
@@ -34,24 +34,24 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 		//Is it an actual entity?
 		if(entity == null) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Invalid entity type");
-			return false;
+			return true;
 		}
 		
 		//Make sure the mob name is not already in use
 		if(dungeon.hasMob(mobName)) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " already has a mob named " + mobName);
-			return false;
+			return true;
 		}
 		
 		//Make sure the mob name is not too long for the database table
 		if(mobName.length() > 32) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Mob name too long!");
-			return false;
+			return true;
 		}
 		
 		//Finally everything has been checked and we can add the mob
-		Mob mob = new Mob(mobName, entity, 0, 0, 0, 0, 0, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
-		DungeonManager.addMobToDungeon(mob);
+		Mob mob = new Mob(mobName, entity, 0, 0, 0, 0, 0, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0);
+		DungeonManager.addMobToDungeon(player, mob);
 		
 		//Tell the player mob addition was successful
 		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The mob " + mob.getName() + " has been created! It will spawn at your location.");
