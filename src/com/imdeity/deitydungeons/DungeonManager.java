@@ -20,39 +20,6 @@ import com.imdeity.deitydungeons.obj.Mob;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonManager {
-	/*
-	 * `dungeon_list`
-	 * 
-	 * id
-	 * dungeon_id
-	 * name
-	 * world
-	 * x
-	 * y
-	 * z
-	 * yaw
-	 * pitch
-	 * 
-	 * 
-	 * `dungeon_info`
-	 * 
-	 * id
-	 * dungeon_id
-	 * name
-	 * type
-	 * health
-	 * x
-	 * y
-	 * z
-	 * helm
-	 * chest
-	 * legs
-	 * boots
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 
 	//Main storage of all dungeons
 	public static Map<String, Dungeon> dungeons;
@@ -103,9 +70,8 @@ public class DungeonManager {
 					int z = results.getInteger(i, "z");
 					int yaw = results.getInteger(i, "yaw");
 					int pitch = results.getInteger(i, "pitch");
-					int reward = results.getInteger(i, "reward");
 
-					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, numberOfPlayers, world, x, y, z, yaw, pitch, reward);
+					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, numberOfPlayers, world, x, y, z, yaw, pitch);
 					dungeons.put(dungeonName, dungeon);
 
 					DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Dungeon " + dungeonName + " loaded");
@@ -235,7 +201,7 @@ public class DungeonManager {
 
 
 		//add to mem
-		Dungeon dungeon = new Dungeon(dungeonID, name, playerAmount, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), 50);
+		Dungeon dungeon = new Dungeon(dungeonID, name, playerAmount, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
 		dungeons.put(name, dungeon);
 		
 		selectedDungeons.put(player, dungeon);
@@ -335,11 +301,5 @@ public class DungeonManager {
 		}
 
 		return false;
-	}
-
-	public static void setDungeonReward(Dungeon dungeon, int reward) {
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_list` SET `reward`=?", reward);
-		
-		dungeon.setReward(reward);
 	}
 }

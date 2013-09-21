@@ -10,7 +10,6 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import com.imdeity.deityapi.DeityAPI;
-import com.imdeity.deityapi.exception.NegativeMoneyException;
 import com.imdeity.deitydungeons.DeityDungeons;
 
 //Represents a running dungeon
@@ -136,13 +135,7 @@ public class RunningDungeon extends Thread {
 				//Players have won
 				for(Player p : originalPlayers) {
 					if(p.isOnline())
-						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "Congratulations! You have won! You have been rewarded " + DeityAPI.getAPI().getEconAPI().getFormattedBalance(dungeon.getReward()));
-				
-					try {
-						DeityAPI.getAPI().getEconAPI().receive(p.getName(), dungeon.getReward(), dungeon.getReward() + " " + DeityAPI.getAPI().getEconAPI().getFormattedBalance(dungeon.getReward()) + " has been added to your balance");
-					} catch (NegativeMoneyException ex) {
-						ex.printStackTrace();
-					}
+						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "Congratulations! You have won!");
 				}
 				
 				//Abandon

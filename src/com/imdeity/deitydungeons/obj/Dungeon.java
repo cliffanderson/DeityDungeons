@@ -22,15 +22,13 @@ public class Dungeon {
 	int yaw;
 	int pitch;
 	Location location;
-	int reward;
 	
-	public Dungeon(int dungeonID, String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch, int reward) {
+	public Dungeon(int dungeonID, String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch) {
 		this.dungeonID = dungeonID;
 		this.name = name;
 		this.numberOfPlayers = numberOfPlayers;
 		this.world = world;
 		location = new Location(world, x, y, z, yaw, pitch);
-		this.reward = reward;
 	}
 	
 	public Location getSpawn() {
@@ -81,13 +79,5 @@ public class Dungeon {
 	
 	public int getID() {
 		return dungeonID;
-	}
-
-	public void setReward(int reward) {
-		this.reward = reward;
-	}
-
-	public int getReward() {
-		return reward;
 	}
 }
