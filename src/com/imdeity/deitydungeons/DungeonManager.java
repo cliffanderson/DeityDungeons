@@ -2,7 +2,9 @@ package com.imdeity.deitydungeons;
 
 import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -301,5 +303,19 @@ public class DungeonManager {
 		}
 
 		return false;
+	}
+	
+	public static void addDungeonRunRecord(Dungeon dungeon, Date start, ArrayList<Player> players) {
+		String playerList = "";
+		
+		for(Player player : players) {
+			playerList += player.getName() + " ";
+		}
+		
+		playerList = playerList.trim();
+		
+		Date now = new Date();
+		
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_log` (`dungeon`, `players`, `start`, `end`, `seconds`) VALUES (?, ?, ?, ?)", dungeon.getName(), playerList, start, now, (int)(now.getTime() - start.getTime()));
 	}
 }

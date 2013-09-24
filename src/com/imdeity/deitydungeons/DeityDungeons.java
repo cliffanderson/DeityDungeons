@@ -48,6 +48,11 @@ public class DeityDungeons extends DeityPlugin {
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
 				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL)");
 		
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +
+				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon` VARCHAR (64) NOT NULL, `players` TEXT NOT NULL, " +
+				"`start` TIMESTAMP NOT NULL, `end` TIMESTAMP NOT NULL," +
+				"`seconds` INT (16) NOT NULL)");	
+		
 		DungeonManager.loadAllDungeons();
 	}
 	

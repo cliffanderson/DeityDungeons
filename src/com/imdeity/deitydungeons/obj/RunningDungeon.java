@@ -1,6 +1,7 @@
 package com.imdeity.deitydungeons.obj;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deitydungeons.DeityDungeons;
+import com.imdeity.deitydungeons.DungeonManager;
 
 //Represents a running dungeon
 public class RunningDungeon extends Thread {
@@ -21,6 +23,8 @@ public class RunningDungeon extends Thread {
 	ArrayList<Entity> entities = new ArrayList<Entity>();
 	
 	Player player;
+	
+	Date start;
 	
 	/*
 	public RunningDungeon(Dungeon dungeon, Player player) {
@@ -40,6 +44,8 @@ public class RunningDungeon extends Thread {
 			this.players.add(player);
 			this.originalPlayers.add(player);
 		}
+		
+		this.start = new Date();
 		
 		this.start();
 	}
@@ -123,6 +129,8 @@ public class RunningDungeon extends Thread {
 				//Abandon
 				DeityDungeons.getRunningDungeons().remove(this);
 				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
+				
+				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
 			}
 		}
 	}
@@ -141,6 +149,8 @@ public class RunningDungeon extends Thread {
 				//Abandon
 				DeityDungeons.getRunningDungeons().remove(this);
 				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
+				
+				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
 			}
 		}
 	}
