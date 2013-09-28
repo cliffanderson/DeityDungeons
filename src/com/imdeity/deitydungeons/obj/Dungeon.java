@@ -22,13 +22,15 @@ public class Dungeon {
 	int yaw;
 	int pitch;
 	Location location;
+	Location finish;
 	
-	public Dungeon(int dungeonID, String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch) {
+	public Dungeon(int dungeonID, String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch, int fx, int fy, int fz) {
 		this.dungeonID = dungeonID;
 		this.name = name;
 		this.numberOfPlayers = numberOfPlayers;
 		this.world = world;
 		location = new Location(world, x, y, z, yaw, pitch);
+		finish = new Location(world, fx, fy, fz);
 	}
 	
 	public Location getSpawn() {

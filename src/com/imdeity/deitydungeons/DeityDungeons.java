@@ -40,7 +40,8 @@ public class DeityDungeons extends DeityPlugin {
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`name` VARCHAR (64) NOT NULL, `number_of_players` INT (16) NOT NULL, `world` VARCHAR (64) NOT NULL, " +
 				"`x` INT (8) NOT NULL, `y` INT (8) NOT NULL, `z` INT (8) NOT NULL," +
-				"`yaw` INT (8) NOT NULL, `pitch` INT (8) NOT NULL)");
+				"`yaw` INT (8) NOT NULL, `pitch` INT (8) NOT NULL, `fx` INT (8) NOT NULL," +
+				"`fy` INT (8) NOT NULL, `fz` INT (8) NOT NULL)");
 		
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_info` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +

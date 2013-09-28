@@ -31,7 +31,8 @@ public class DungeonCreateCommand extends DeityCommandReceiver {
 		//Make the dungeon
 		DungeonManager.createDungeon(player, dungeon, players);
 		
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon + " has been created. The player spawn point has been set to your location.");
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon + " has been created. " +
+				"The player spawn point has been set to your location. Please use <red>/dungeon setfinish<red> command to set the finish point of the dungeon");
 		
 		return true;
 	}

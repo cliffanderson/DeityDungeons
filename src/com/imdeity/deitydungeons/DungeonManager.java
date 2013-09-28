@@ -72,8 +72,12 @@ public class DungeonManager {
 					int z = results.getInteger(i, "z");
 					int yaw = results.getInteger(i, "yaw");
 					int pitch = results.getInteger(i, "pitch");
+					
+					int fx = results.getInteger(i, "fx");
+					int fy = results.getInteger(i, "fy");
+					int fz = results.getInteger(i, "fz");
 
-					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, numberOfPlayers, world, x, y, z, yaw, pitch);
+					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, numberOfPlayers, world, x, y, z, yaw, pitch, fx, fy, fz);
 					dungeons.put(dungeonName, dungeon);
 
 					DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Dungeon " + dungeonName + " loaded");
@@ -180,20 +184,22 @@ public class DungeonManager {
 	//Creates a dungeon
 	public static void createDungeon(Player player, String name, int playerAmount) {
 		int dungeonID = 0;
+		
 		//see if there is a row in the table, if there is set the dungeonID
 		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_list` ORDER BY `dungeon_id` LIMIT 1");
 
 		if(results != null && results.hasRows()) {
 			try {
-				dungeonID = results.getInteger(0, "dungeon_id");
+				dungeonID = results.getInteger(0, "dungeon_id") + 1;
 			} catch (SQLDataException e) {
 				DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "There was an SQL error while creating a dungeon");
 				e.printStackTrace();
 			}
 		}
+		
 
 		//Put dungeon info in the main dungeon list table
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_list` (`dungeon_id`, `name`, `number_of_players`, `world`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_list` (`dungeon_id`, `name`, `number_of_players`, `world`, `x`, `y`, `z`, `yaw`, `pitch`, `fx`, `fy`, `fz`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 				dungeonID, name, playerAmount, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
 
 		//Table for the mob info
@@ -203,7 +209,7 @@ public class DungeonManager {
 
 
 		//add to mem
-		Dungeon dungeon = new Dungeon(dungeonID, name, playerAmount, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
+		Dungeon dungeon = new Dungeon(dungeonID, name, playerAmount, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
 		dungeons.put(name, dungeon);
 		
 		selectedDungeons.put(player, dungeon);
