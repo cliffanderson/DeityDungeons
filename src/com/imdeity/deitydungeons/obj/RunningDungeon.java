@@ -3,6 +3,7 @@ package com.imdeity.deitydungeons.obj;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -168,5 +169,10 @@ public class RunningDungeon {
 		}
 		
 		return false;
+	}
+	
+	public void handleMove(Player player, Location location) {
+		//First check to see if dungeon has been finished
+		
 	}
 }

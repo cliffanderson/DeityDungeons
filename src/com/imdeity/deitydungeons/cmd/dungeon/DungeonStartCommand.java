@@ -30,7 +30,6 @@ public class DungeonStartCommand extends DeityCommandReceiver {
 			return true;
 		}
 		
-		
 		Player[] players = new Player[args.length - 1];
 		
 		for(int i = 1; i < args.length; i++) {

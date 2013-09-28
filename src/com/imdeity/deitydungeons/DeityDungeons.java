@@ -12,31 +12,36 @@ import com.imdeity.deitydungeons.listeners.DungeonListener;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DeityDungeons extends DeityPlugin {
-	
+
 	public static DeityDungeons plugin;
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
 	private static ArrayList<String> runningDungeonNames = new ArrayList<String>();
-	
+
+	//The delay in milliseconds before the mobs are spawned in a dungeon
 	public static long DUNGEON_DELAY = 0;
-	
+
+	//The distance in blocks a player must within the finish point for the dungeon to be completed
+	public static int FINISH_DISTANCE = 0;
+
 	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
 		return runningDungeons;
 	}
-	
+
 	public static ArrayList<String> getRunningDungeonNames() {
 		return runningDungeonNames;
 	}
-	
+
 	@Override
 	protected void initCmds() {
 		registerCommand(new DungeonCommandHandler("DeityDungeons", "dungeon"));
 		registerCommand(new MobCommandHandler("DeityDungeons", "mob"));
 	}
-	
+
 	@Override
 	protected void initConfig() {
-		if(!this.getConfig().contains("default-dungeon-delay")) {
-			this.getConfig().set("default-dungeon-delay", 5000);
+		if(!this.getConfig().contains("dungeon-delay")) {
+			this.getConfig().set("dungeon-delay", 5000);
+			
 			try {
 				this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
 			} catch (IOException e) {
@@ -44,10 +49,20 @@ public class DeityDungeons extends DeityPlugin {
 			}
 		}
 		
-		DUNGEON_DELAY = this.getConfig().getLong("default-dungeon-delay");
-		
+		if(!this.getConfig().contains("dungeon-finish-distance")) {
+			this.getConfig().set("dungeon-finish-distance", 3);
+			
+			try {
+				this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		DUNGEON_DELAY = this.getConfig().getLong("dungeon-delay");
+		FINISH_DISTANCE = this.getConfig().getInt("dungeon-finish-distance");
 	}
-	
+
 	@Override
 	protected void initDatabase() {
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_list` (" +
@@ -56,46 +71,46 @@ public class DeityDungeons extends DeityPlugin {
 				"`x` INT (8) NOT NULL, `y` INT (8) NOT NULL, `z` INT (8) NOT NULL," +
 				"`yaw` INT (8) NOT NULL, `pitch` INT (8) NOT NULL, `fx` INT (8) NOT NULL," +
 				"`fy` INT (8) NOT NULL, `fz` INT (8) NOT NULL)");
-		
+
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_info` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL, `delay` INT (16) NOT NULL, " +
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
 				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL)");
-		
+
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon` VARCHAR (64) NOT NULL, `players` TEXT NOT NULL, " +
 				"`start` TIMESTAMP NOT NULL, `end` TIMESTAMP NOT NULL," +
 				"`seconds` INT (16) NOT NULL)");	
-		
+
 		DungeonManager.loadAllDungeons();
 	}
-	
+
 	@Override
 	protected void initInternalDatamembers() {
-		
+
 	}
-	
+
 	@Override
 	protected void initLanguage() {
-		
+
 	}
-	
+
 	@Override
 	protected void initListeners() {
 		this.registerListener(new DungeonListener());
 	}
-	
+
 	@Override
 	protected void initPlugin() {
 		plugin = this;
 	}
-	
+
 	@Override
 	protected void initTasks() {
-		
+
 	}
-	
+
 	public static boolean isInt(String s) {
 		try {
 			Integer.parseInt(s);

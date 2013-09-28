@@ -6,6 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.imdeity.deityapi.api.DeityListener;
@@ -65,4 +66,13 @@ public class DungeonListener extends DeityListener {
 			}
 		}
 	}	
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		for(RunningDungeon runningDungeon : DeityDungeons.getRunningDungeons()) {
+			if(runningDungeon.containsPlayer(event.getPlayer())) {
+				runningDungeon.handleMove(event.getPlayer(), event.getTo());
+			}
+		}
+	}
 }
