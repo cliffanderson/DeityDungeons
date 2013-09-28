@@ -54,7 +54,6 @@ public class DungeonManager {
 				try {
 					int dungeonID = results.getInteger(i, "dungeon_id");
 					String dungeonName = results.getString(i, "name");
-					int numberOfPlayers = results.getInteger(i, "number_of_players");
 
 					//If the world is null, it cannot be found. Make sure to warn the console
 					String worldName = results.getString(i, "world");
@@ -77,7 +76,7 @@ public class DungeonManager {
 					int fy = results.getInteger(i, "fy");
 					int fz = results.getInteger(i, "fz");
 
-					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, numberOfPlayers, world, x, y, z, yaw, pitch, fx, fy, fz);
+					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, world, x, y, z, yaw, pitch, fx, fy, fz);
 					dungeons.put(dungeonName, dungeon);
 
 					DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Dungeon " + dungeonName + " loaded");
@@ -182,7 +181,7 @@ public class DungeonManager {
 	}
 
 	//Creates a dungeon
-	public static void createDungeon(Player player, String name, int playerAmount) {
+	public static void createDungeon(Player player, String name) {
 		int dungeonID = 0;
 		
 		//see if there is a row in the table, if there is set the dungeonID
@@ -199,8 +198,8 @@ public class DungeonManager {
 		
 
 		//Put dungeon info in the main dungeon list table
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_list` (`dungeon_id`, `name`, `number_of_players`, `world`, `x`, `y`, `z`, `yaw`, `pitch`, `fx`, `fy`, `fz`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				dungeonID, name, playerAmount, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_list` (`dungeon_id`, `name`, `world`, `x`, `y`, `z`, `yaw`, `pitch`, `fx`, `fy`, `fz`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+				dungeonID, name, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
 
 		//Table for the mob info
 		//DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS " + DeityDungeons.tableName(name) + " (`id` INT(16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` VARCHAR(32) NOT NULL, `type` VARCHAR(32) NOT NULL, `health` INT(16) NOT NULL, " +
@@ -209,7 +208,7 @@ public class DungeonManager {
 
 
 		//add to mem
-		Dungeon dungeon = new Dungeon(dungeonID, name, playerAmount, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
+		Dungeon dungeon = new Dungeon(dungeonID, name, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
 		dungeons.put(name, dungeon);
 		
 		selectedDungeons.put(player, dungeon);
@@ -323,5 +322,12 @@ public class DungeonManager {
 		Date now = new Date();
 		
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_log` (`dungeon`, `players`, `start`, `end`, `seconds`) VALUES (?, ?, ?, ?)", dungeon.getName(), playerList, start, now, (int)(now.getTime() - start.getTime()));
+	}
+
+	public static void setDungeonFinish(Dungeon dungeon, int x, int y, int z) {
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_list` SET `fx`=?, `fy`=,? `fz`=? WHERE `dungeon_id`=? AND `name`=?", x, y, z, dungeon.getID(), dungeon.getName());
+		
+		//memory
+		dungeon.setDungeonFinish(x, y, z);
 	}
 }

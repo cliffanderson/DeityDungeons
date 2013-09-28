@@ -14,7 +14,6 @@ public class Dungeon {
 	
 	int dungeonID;
 	String name;
-	int numberOfPlayers;
 	World world;
 	int x;
 	int y;
@@ -24,10 +23,9 @@ public class Dungeon {
 	Location location;
 	Location finish;
 	
-	public Dungeon(int dungeonID, String name, int numberOfPlayers, World world, int x, int y, int z, int yaw, int pitch, int fx, int fy, int fz) {
+	public Dungeon(int dungeonID, String name, World world, int x, int y, int z, int yaw, int pitch, int fx, int fy, int fz) {
 		this.dungeonID = dungeonID;
 		this.name = name;
-		this.numberOfPlayers = numberOfPlayers;
 		this.world = world;
 		location = new Location(world, x, y, z, yaw, pitch);
 		finish = new Location(world, fx, fy, fz);
@@ -81,5 +79,21 @@ public class Dungeon {
 	
 	public int getID() {
 		return dungeonID;
+	}
+	
+	public void setDungeonFinish(int x, int y, int z) {
+		this.finish = new Location(this.world, x, y, z);
+	}
+	
+	public int getFinishX() {
+		return finish.getBlockX();
+	}
+	
+	public int getFinishY() {
+		return finish.getBlockY();
+	}
+	
+	public int getFinishZ() {
+		return finish.getBlockZ();
 	}
 }

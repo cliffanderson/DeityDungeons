@@ -17,10 +17,9 @@ public class DungeonCreateCommand extends DeityCommandReceiver {
 	@Override
 	public boolean onPlayerRunCommand(Player player, String[] args) {
 		//Basic checking
-		if(args.length != 2) return false;
+		if(args.length != 1) return false;
 		if(!DeityDungeons.isInt(args[1])) return false;
 		String dungeon = args[0];
-		int players = Integer.parseInt(args[1]);
 		
 		//Make sure there isn't an existing dungeon
 		if(DungeonManager.dungeonExists(dungeon)) {
@@ -29,7 +28,7 @@ public class DungeonCreateCommand extends DeityCommandReceiver {
 		}
 		
 		//Make the dungeon
-		DungeonManager.createDungeon(player, dungeon, players);
+		DungeonManager.createDungeon(player, dungeon);
 		
 		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon + " has been created. " +
 				"The player spawn point has been set to your location. Please use <red>/dungeon setfinish<red> command to set the finish point of the dungeon");
