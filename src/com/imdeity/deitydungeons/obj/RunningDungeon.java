@@ -3,20 +3,13 @@ package com.imdeity.deitydungeons.obj;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
 
 import com.imdeity.deityapi.DeityAPI;
-import com.imdeity.deitydungeons.DeityDungeons;
-import com.imdeity.deitydungeons.DungeonManager;
 
 //Represents a running dungeon
-public class RunningDungeon extends Thread {
-	
+public class RunningDungeon {
 	Dungeon dungeon;
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<Player> originalPlayers = new ArrayList<Player>();
@@ -46,10 +39,9 @@ public class RunningDungeon extends Thread {
 		}
 		
 		this.start = new Date();
-		
-		this.start();
 	}
 	
+	/*
 	@Override
 	public void run() {
 		//spawn players
@@ -89,6 +81,7 @@ public class RunningDungeon extends Thread {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Dungeon " + dungeon.getName() + " has started. Good luck!");
 		}
 	}
+	*/
 	
 	public boolean containsPlayer(Player player) {
 		//This will be an alive player
@@ -113,7 +106,18 @@ public class RunningDungeon extends Thread {
 		return players.size() != 0;
 	}
 	
-	public void notifyDeath(Player player) {
+	public Dungeon getDungeon() {
+		return this.dungeon;
+	}
+	
+	public Date getStart() {
+		return this.start;
+	}
+	
+	public ArrayList<Player> getOriginalPlayers() {
+		return this.originalPlayers;
+	}
+	public boolean notifyDeath(Player player) {
 		if(containsPlayer(player)) {
 			players.remove(player);
 			
@@ -126,16 +130,22 @@ public class RunningDungeon extends Thread {
 								
 				removeAllMobs();
 				
+				return true;
+				
 				//Abandon
+				/*
 				DeityDungeons.getRunningDungeons().remove(this);
 				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
 				
 				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
+				*/
 			}
 		}
+		
+		return false;
 	}
 	
-	public void notifyDeathOfMob(Entity e) {
+	public boolean notifyDeathOfMob(Entity e) {
 		if(entities.contains(e)) {
 			entities.remove(e);
 			
@@ -146,12 +156,17 @@ public class RunningDungeon extends Thread {
 						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "Congratulations! You have won!");
 				}
 				
+				return true;
 				//Abandon
+				/*
 				DeityDungeons.getRunningDungeons().remove(this);
 				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
 				
 				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
+				*/
 			}
 		}
+		
+		return false;
 	}
 }

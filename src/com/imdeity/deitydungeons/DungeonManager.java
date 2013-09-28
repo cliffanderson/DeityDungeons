@@ -330,4 +330,21 @@ public class DungeonManager {
 		//memory
 		dungeon.setDungeonFinish(x, y, z);
 	}
+	
+	public static void startDungeon(final Dungeon dungeon, final Player...players) {
+		DeityDungeons.plugin.getServer().getScheduler().runTaskAsynchronously(DeityDungeons.plugin, new Runnable() {
+
+			public void run() {
+				try {
+					Thread.sleep(DeityDungeons.DUNGEON_DELAY);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				DeityDungeons.getRunningDungeons().add(new RunningDungeon(dungeon, players));
+				DeityDungeons.getRunningDungeonNames().add(dungeon.getName());
+			}
+		
+		});
+	}
 }

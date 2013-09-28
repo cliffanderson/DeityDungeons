@@ -53,7 +53,12 @@ public class DungeonStartCommand extends DeityCommandReceiver {
 	}
 
 	@Override
-	public boolean onPlayerRunCommand(Player player, String[] args) {		
+	public boolean onPlayerRunCommand(Player player, String[] args) {
+		
+		//Command currently not used, as dungeons are started by the console or a plugin
+		//executing a console command
+		
+		/*
 		if(args.length > 1) {
 			return false;
 		}
@@ -80,7 +85,8 @@ public class DungeonStartCommand extends DeityCommandReceiver {
 
 		DeityDungeons.getRunningDungeons().add(new RunningDungeon(dungeon, player));
 		DeityDungeons.getRunningDungeonNames().add(dungeon.getName());
-		
+		*/
 		return true;
+		
 	}
 }

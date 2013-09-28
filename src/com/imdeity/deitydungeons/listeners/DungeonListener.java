@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.imdeity.deityapi.api.DeityListener;
 import com.imdeity.deitydungeons.DeityDungeons;
+import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonListener extends DeityListener {
@@ -20,9 +21,9 @@ public class DungeonListener extends DeityListener {
 		//Don't want players to respawn in dungeons
 		for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
 			if(rd.containsPlayer(player)) {
-				event.getPlayer().teleport(Bukkit.getServer().getWorld("world").getSpawnLocation());
+				event.getPlayer().teleport(Bukkit.getServer().getWorld("world").getSpawnLocation()); //TODO: ok? //Will probably get taken care of by cloud system...?
 				rd.removePlayer(player);
-				
+
 				if(!rd.hasPlayers()) {
 					rd.removeAllMobs();
 				}
@@ -30,23 +31,35 @@ public class DungeonListener extends DeityListener {
 		}
 		//TODO: ok?
 	}	
-	
+
+	/*
+	DeityDungeons.getRunningDungeons().remove(this);
+	DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
+
+	DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
+	 */
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-				if(rd.containsPlayer(player)) {
-					rd.notifyDeath(player);
+				if(rd.notifyDeath(player)) {
+					DeityDungeons.getRunningDungeons().remove(rd);
+					DeityDungeons.getRunningDungeonNames().remove(rd.getDungeon().getName());
+					DungeonManager.addDungeonRunRecord(rd.getDungeon(), rd.getStart(), rd.getOriginalPlayers());
 					break;
 				}
 			}
 		}else{
 			Entity e = (Entity) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-				if(rd.containsMob(e)) {
+				if(rd.notifyDeathOfMob(e)) {
 					rd.notifyDeathOfMob(e);
+					DeityDungeons.getRunningDungeons().remove(rd);
+					DeityDungeons.getRunningDungeonNames().remove(rd.getDungeon().getName());
+					DungeonManager.addDungeonRunRecord(rd.getDungeon(), rd.getStart(), rd.getOriginalPlayers());
 					break;
 				}
 			}

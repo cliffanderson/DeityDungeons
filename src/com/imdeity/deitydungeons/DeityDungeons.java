@@ -1,5 +1,7 @@
 package com.imdeity.deitydungeons;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.imdeity.deityapi.DeityAPI;
@@ -14,6 +16,8 @@ public class DeityDungeons extends DeityPlugin {
 	public static DeityDungeons plugin;
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
 	private static ArrayList<String> runningDungeonNames = new ArrayList<String>();
+	
+	public static long DUNGEON_DELAY = 0;
 	
 	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
 		return runningDungeons;
@@ -31,6 +35,16 @@ public class DeityDungeons extends DeityPlugin {
 	
 	@Override
 	protected void initConfig() {
+		if(!this.getConfig().contains("default-dungeon-delay")) {
+			this.getConfig().set("default-dungeon-delay", 5000);
+			try {
+				this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		DUNGEON_DELAY = this.getConfig().getLong("default-dungeon-delay");
 		
 	}
 	
