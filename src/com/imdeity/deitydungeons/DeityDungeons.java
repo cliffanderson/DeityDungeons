@@ -76,7 +76,7 @@ public class DeityDungeons extends DeityPlugin {
 
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_info` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
-				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL, `delay` INT (16) NOT NULL, " +
+				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL," +
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
 				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0)");
 

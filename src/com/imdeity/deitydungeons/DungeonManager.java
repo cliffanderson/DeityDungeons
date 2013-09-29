@@ -110,10 +110,9 @@ public class DungeonManager {
 						int mobx = mobResults.getInteger(i, "x");
 						int moby = mobResults.getInteger(i, "y");
 						int mobz = mobResults.getInteger(i, "z");
-						int delay = mobResults.getInteger(i, "delay");
 						boolean target = mobResults.getInteger(i, "target") == 0 ? false : true;
 						
-						Mob mob = new Mob(mobName, type, health, helm, chest, pants, feet, getDungeonByID(dungeonID), mobx, moby, mobz, delay, target);
+						Mob mob = new Mob(mobName, type, health, helm, chest, pants, feet, getDungeonByID(dungeonID), mobx, moby, mobz, target);
 
 						//Add the mob to the dungeon
 						getDungeonByID(dungeonID).addMob(mob);
@@ -219,8 +218,8 @@ public class DungeonManager {
 	//dungeon object in memory
 	public static void addMobToDungeon(Player player, Mob mob) {
 		//sql
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `name`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`, `delay`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				mob.getDungeon().getID(), mob.getName(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm(), mob.getChest(), mob.getPants(), mob.getFeet(), mob.getDelay());
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `name`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+				mob.getDungeon().getID(), mob.getName(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm(), mob.getChest(), mob.getPants(), mob.getFeet());
 
 		//for dungeon in memory
 		mob.getDungeon().addMob(mob);
@@ -284,12 +283,6 @@ public class DungeonManager {
 		mob.setX(x);
 		mob.setY(y);
 		mob.setZ(z);
-	}
-	
-	public static void setMobDelay(Mob mob, int delay) {
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `delay`=? WHERE `dungeon_id`=? AND `name`=?", delay, mob.getDungeon().getID(), mob.getName());
-	
-		mob.setDelay(delay);
 	}
 
 	public static void setMobTarget(Mob mob, boolean target) {

@@ -3,7 +3,6 @@ package com.imdeity.deitydungeons.cmd;
 import com.imdeity.deityapi.api.DeityCommandHandler;
 import com.imdeity.deitydungeons.cmd.mob.MobSelectCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetChestCommand;
-import com.imdeity.deitydungeons.cmd.mob.MobSetDelayCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetFeetCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetHealthCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetHelmCommand;
@@ -28,7 +27,6 @@ public class MobCommandHandler extends DeityCommandHandler {
 		this.registerCommand("setlegs", new String[]{"pants"}, "<leather|iron|gold|diamond|none>", "Sets the leggings for the mob", new MobSetLegsCommand(), "mob.setpants");
 		this.registerCommand("setboots", new String[]{"boots"}, "<leather|iron|gold|diamond|none>", "Sets the boots for the mob", new MobSetFeetCommand(), "mob.setfeet");
 		this.registerCommand("setspawn", new String[]{}, "", "Sets the mob's spawn location to the user's location", new MobSetSpawn(), "mob.setspawn");
-		this.registerCommand("setdelay", new String[]{}, "<delay>", "Sets the mob's spawn delay in seconds", new MobSetDelayCommand(), "mob.setdelay");
 		this.registerCommand("settarget", new String[]{}, "<true|false|T|F|0|1>", "True means the mob will have its target set to the closest player", new MobSetTargetCommand(), "mob.settarget");
 	}
 

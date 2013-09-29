@@ -7,7 +7,7 @@ import org.bukkit.entity.EntityType;
 public class Mob {
 	String name;
 	EntityType type;
-	int health, helm, chest, pants, feet, x, y, z, delay;
+	int health, helm, chest, pants, feet, x, y, z;
 	Dungeon dungeon;
 	Location location;
 	World world;
@@ -16,7 +16,7 @@ public class Mob {
 	//False be default
 	boolean target;
 	
-	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, int delay, boolean target) {
+	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, boolean target) {
 		this.name = name;
 		this.type = type;
 		this.health = health;
@@ -30,9 +30,7 @@ public class Mob {
 		this.y = y;
 		this.z = z;
 		this.world = dungeon.getWorld();
-		
-		this.delay = delay;
-		
+				
 		location = new Location(world, x, y, z);
 		
 		this.target = target;
@@ -128,14 +126,6 @@ public class Mob {
 
 	public void setDungeon(Dungeon dungeon) {
 		this.dungeon = dungeon;
-	}
-	
-	public int getDelay() {
-		return delay;
-	}
-	
-	public void setDelay(int delay) {
-		this.delay = delay;
 	}
 	
 	public boolean getTarget() {
