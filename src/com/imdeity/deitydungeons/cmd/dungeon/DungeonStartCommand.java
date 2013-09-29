@@ -8,7 +8,6 @@ import com.imdeity.deityapi.api.DeityCommandReceiver;
 import com.imdeity.deitydungeons.DeityDungeons;
 import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.Dungeon;
-import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonStartCommand extends DeityCommandReceiver {
 
@@ -44,8 +43,15 @@ public class DungeonStartCommand extends DeityCommandReceiver {
 		}
 		
 		Dungeon dungeon = DungeonManager.getDungeonByName(args[0]);
-		DeityDungeons.getRunningDungeons().add(new RunningDungeon(dungeon, players));
-		DeityDungeons.getRunningDungeonNames().add(dungeon.getName());
+		
+		//Make sure dungeon finish has been set (coords cannot be -1, -1 and -1)
+		if(dungeon.getSpawn().getBlockX() == -1 && dungeon.getSpawn().getBlockY() == -1 && dungeon.getSpawn().getBlockZ() == -1) {
+			DeityAPI.getAPI().getChatAPI().outWarn("DeityDungeons", "Error: The finish point of the dungeon " + dungeon.getName() + " has not been set. " +
+					"Please use the command /dungeon setfinish to set the finish and be able to play the dungeon");
+			return true;
+		}
+		
+		DungeonManager.startDungeon(dungeon, players);
 		
 		DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "The dungeon " + args[0] + " has been started");
 		return true;

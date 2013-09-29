@@ -6,8 +6,12 @@ import java.util.Date;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+import org.bukkit.entity.Creature;
 
 import com.imdeity.deityapi.DeityAPI;
+import com.imdeity.deitydungeons.DeityDungeons;
+import com.imdeity.deitydungeons.DungeonManager;
 
 //Represents a running dungeon
 public class RunningDungeon {
@@ -20,18 +24,7 @@ public class RunningDungeon {
 	
 	Date start;
 	
-	/*
-	public RunningDungeon(Dungeon dungeon, Player player) {
-		this.dungeon = dungeon;
-		this.player = player;
-		players.add(player);
-		originalPlayers.add(player);
-		
-		this.start();
-	}
-	*/
-	
-	public RunningDungeon(Dungeon dungeon, Player...playerArray) {
+	public RunningDungeon(Dungeon dungeon, Player[] playerArray) {
 		this.dungeon = dungeon;
 		
 		for(Player player : playerArray) {
@@ -41,48 +34,6 @@ public class RunningDungeon {
 		
 		this.start = new Date();
 	}
-	
-	/*
-	@Override
-	public void run() {
-		//spawn players
-		for(Player player : players) {
-			System.out.println("is player null: " + player);
-			player.teleport(dungeon.getSpawn());
-		}
-			
-		for(Player player : players) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The dungeon <yellow>" + dungeon.name + " <green>will be starting in 5 seconds");
-		}
-		
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		//spawn mobs
-		for(Mob mob : dungeon.mobs) {
-			Entity entity = dungeon.getWorld().spawnEntity(mob.getLocation(), mob.getType());
-			LivingEntity living = (LivingEntity) entity;
-			EntityEquipment ee = living.getEquipment();
-			
-			ee.setHelmet(new ItemStack(mob.getHelm(), 1));
-			ee.setChestplate(new ItemStack(mob.getChest(), 1));
-			ee.setLeggings(new ItemStack(mob.getPants(), 1));
-			ee.setBoots(new ItemStack(mob.getFeet(), 1));
-
-			ee.setItemInHand(new ItemStack(Material.SIGN, 1));
-			
-			entities.add(entity);
-		}
-		
-		for(Player player : players) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Dungeon " + dungeon.getName() + " has started. Good luck!");
-		}
-	}
-	*/
 	
 	public boolean containsPlayer(Player player) {
 		//This will be an alive player
@@ -126,24 +77,17 @@ public class RunningDungeon {
 				//Dungeon over all players have died
 				for(Player p : originalPlayers) {
 					if(p.isOnline())
-						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "All players have died while fighting " + dungeon.getName() + ". Better luck next time!");
+						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "<yellow>All players have died while exploring <red>" + dungeon.getName() + ". <yellow>Better luck next time!");
 				}
 								
 				removeAllMobs();
-				
+				DungeonManager.notifyDungeonEnd(this);
 				return true;
-				
-				//Abandon
-				/*
-				DeityDungeons.getRunningDungeons().remove(this);
-				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
-				
-				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
-				*/
 			}
 		}
 		
 		return false;
+		
 	}
 	
 	public boolean notifyDeathOfMob(Entity e) {
@@ -157,22 +101,53 @@ public class RunningDungeon {
 						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "Congratulations! You have won!");
 				}
 				
+				DungeonManager.notifyDungeonEnd(this);
 				return true;
-				//Abandon
-				/*
-				DeityDungeons.getRunningDungeons().remove(this);
-				DeityDungeons.getRunningDungeonNames().remove(this.dungeon.getName());
-				
-				DungeonManager.addDungeonRunRecord(dungeon, this.start, originalPlayers);
-				*/
 			}
 		}
 		
 		return false;
 	}
 	
-	public void handleMove(Player player, Location location) {
+	public void handleMove(Player player, Location playerAt) {
 		//First check to see if dungeon has been finished
+		Location endAt = dungeon.getFinish();
+
+		//Vector of the player
+		Vector p = new Vector(playerAt.getBlockX(), playerAt.getBlockY(), playerAt.getBlockZ());
 		
+		//Vector of the end point
+		Vector e = new Vector(endAt.getBlockX(), endAt.getBlockY(), endAt.getBlockZ());
+	
+		//Distance from end
+		int distance = (int) p.distance(e);
+		
+		//See if they are close enough
+		if(distance <= DeityDungeons.FINISH_DISTANCE) {
+			//Player is close enough to win
+			DungeonManager.notifyDungeonEnd(this);
+			return;
+		}
+		
+		//Dungeon has not ended, maybe we have to spawn a mob
+		for(Mob mob : dungeon.getMobs()) {
+			//Vector of the player
+			Vector p1 = new Vector(playerAt.getBlockX(), playerAt.getBlockY(), playerAt.getBlockZ());
+			
+			//Vector of the mob
+			Vector m = new Vector(mob.getX(), mob.getY(), mob.getZ());
+			
+			//Distance from player
+			int mobDistance = (int) p1.distance(m);
+			
+			//See if they are close enough
+			if(mobDistance <= DeityDungeons.MOB_SPAWN_DISTANCE) {
+				//Spawn the mob
+				Entity entity = dungeon.getWorld().spawnEntity(mob.getLocation(), mob.getType());
+				if(mob.getTarget()) ((Creature) entity).setTarget(player);
+				return;
+			}
+			
+		}
 	}
 }

@@ -87,7 +87,6 @@ public class DungeonManager {
 			}
 
 			//Load all the mobs for all the dungeons
-
 			if(mobResults != null && mobResults.hasRows()) {
 				
 				for(int i = 0; i < mobResults.rowCount(); i++) {
@@ -112,8 +111,9 @@ public class DungeonManager {
 						int moby = mobResults.getInteger(i, "y");
 						int mobz = mobResults.getInteger(i, "z");
 						int delay = mobResults.getInteger(i, "delay");
+						boolean target = mobResults.getInteger(i, "target") == 0 ? false : true;
 						
-						Mob mob = new Mob(mobName, type, health, helm, chest, pants, feet, getDungeonByID(dungeonID), mobx, moby, mobz, delay);
+						Mob mob = new Mob(mobName, type, health, helm, chest, pants, feet, getDungeonByID(dungeonID), mobx, moby, mobz, delay, target);
 
 						//Add the mob to the dungeon
 						getDungeonByID(dungeonID).addMob(mob);
@@ -292,6 +292,12 @@ public class DungeonManager {
 		mob.setDelay(delay);
 	}
 
+	public static void setMobTarget(Mob mob, boolean target) {
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `target`=? WHERE `dungeon_id`=? AND `name`=?", target, mob.getDungeon().getID(), mob.getName());
+		
+		mob.setTarget(target);
+	}
+	
 	//Used to check if a player has a selected dungeon
 	public static boolean playerHasDungeon(Player player) {
 		return getPlayersDungeon(player) != null;
@@ -331,7 +337,12 @@ public class DungeonManager {
 		dungeon.setDungeonFinish(x, y, z);
 	}
 	
-	public static void startDungeon(final Dungeon dungeon, final Player...players) {
+	public static void startDungeon(final Dungeon dungeon, final Player[] players) {
+		for(Player player : players) {
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<yellow>The dungeon <red>" + dungeon.getName() + " <yellow> will be starting in " + DeityDungeons.DUNGEON_DELAY + (DeityDungeons.DUNGEON_DELAY == 1 ? "second" : "seconds"));
+			player.teleport(dungeon.getSpawn());
+		}
+		
 		DeityDungeons.plugin.getServer().getScheduler().runTaskAsynchronously(DeityDungeons.plugin, new Runnable() {
 
 			public void run() {
@@ -346,5 +357,11 @@ public class DungeonManager {
 			}
 		
 		});
+	}
+	
+	public static void notifyDungeonEnd(RunningDungeon running) {
+		DeityDungeons.getRunningDungeons().remove(running);
+		DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
+		DungeonManager.addDungeonRunRecord(running.getDungeon(), running.getStart(), running.getOriginalPlayers());
 	}
 }

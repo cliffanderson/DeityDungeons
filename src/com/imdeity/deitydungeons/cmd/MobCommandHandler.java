@@ -9,6 +9,7 @@ import com.imdeity.deitydungeons.cmd.mob.MobSetHealthCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetHelmCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetLegsCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetSpawn;
+import com.imdeity.deitydungeons.cmd.mob.MobSetTargetCommand;
 import com.imdeity.deitydungeons.cmd.mob.MobSetTypeCommand;
 
 public class MobCommandHandler extends DeityCommandHandler {
@@ -28,6 +29,7 @@ public class MobCommandHandler extends DeityCommandHandler {
 		this.registerCommand("setboots", new String[]{"boots"}, "<leather|iron|gold|diamond|none>", "Sets the boots for the mob", new MobSetFeetCommand(), "mob.setfeet");
 		this.registerCommand("setspawn", new String[]{}, "", "Sets the mob's spawn location to the user's location", new MobSetSpawn(), "mob.setspawn");
 		this.registerCommand("setdelay", new String[]{}, "<delay>", "Sets the mob's spawn delay in seconds", new MobSetDelayCommand(), "mob.setdelay");
+		this.registerCommand("settarget", new String[]{}, "<true|false|T|F|0|1>", "True means the mob will have its target set to the closest player", new MobSetTargetCommand(), "mob.settarget");
 	}
 
 }

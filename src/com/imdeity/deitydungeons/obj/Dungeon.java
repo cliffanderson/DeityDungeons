@@ -96,4 +96,8 @@ public class Dungeon {
 	public int getFinishZ() {
 		return finish.getBlockZ();
 	}
+	
+	public Location getFinish() {
+		return finish;
+	}
 }

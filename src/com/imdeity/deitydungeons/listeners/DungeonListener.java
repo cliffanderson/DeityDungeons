@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.imdeity.deityapi.api.DeityListener;
 import com.imdeity.deitydungeons.DeityDungeons;
-import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonListener extends DeityListener {
@@ -46,23 +45,12 @@ public class DungeonListener extends DeityListener {
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-				if(rd.notifyDeath(player)) {
-					DeityDungeons.getRunningDungeons().remove(rd);
-					DeityDungeons.getRunningDungeonNames().remove(rd.getDungeon().getName());
-					DungeonManager.addDungeonRunRecord(rd.getDungeon(), rd.getStart(), rd.getOriginalPlayers());
-					break;
-				}
+				if(rd.notifyDeath(player)) break;
 			}
 		}else{
 			Entity e = (Entity) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-				if(rd.notifyDeathOfMob(e)) {
-					rd.notifyDeathOfMob(e);
-					DeityDungeons.getRunningDungeons().remove(rd);
-					DeityDungeons.getRunningDungeonNames().remove(rd.getDungeon().getName());
-					DungeonManager.addDungeonRunRecord(rd.getDungeon(), rd.getStart(), rd.getOriginalPlayers());
-					break;
-				}
+				if(rd.notifyDeathOfMob(e)) break;
 			}
 		}
 	}	

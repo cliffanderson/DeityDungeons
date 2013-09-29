@@ -12,7 +12,11 @@ public class Mob {
 	Location location;
 	World world;
 	
-	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, int delay) {
+	//If the mob should target the nearest player automatically, or leave it to minecraft
+	//False be default
+	boolean target;
+	
+	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, int delay, boolean target) {
 		this.name = name;
 		this.type = type;
 		this.health = health;
@@ -30,6 +34,8 @@ public class Mob {
 		this.delay = delay;
 		
 		location = new Location(world, x, y, z);
+		
+		this.target = target;
 	}
 	
 	public Location getLocation() {
@@ -132,4 +138,11 @@ public class Mob {
 		this.delay = delay;
 	}
 	
+	public boolean getTarget() {
+		return target;
+	}
+	
+	public void setTarget(boolean target) {
+		this.target = target;
+	}
 }

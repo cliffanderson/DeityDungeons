@@ -50,7 +50,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 		}
 		
 		//Finally everything has been checked and we can add the mob
-		Mob mob = new Mob(mobName, entity, 0, 0, 0, 0, 0, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0);
+		Mob mob = new Mob(mobName, entity, 0, 0, 0, 0, 0, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), 0, false);
 		DungeonManager.addMobToDungeon(player, mob);
 		
 		//Tell the player mob addition was successful

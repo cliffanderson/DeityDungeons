@@ -17,11 +17,14 @@ public class DeityDungeons extends DeityPlugin {
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
 	private static ArrayList<String> runningDungeonNames = new ArrayList<String>();
 
-	//The delay in milliseconds before the mobs are spawned in a dungeon
-	public static long DUNGEON_DELAY = 0;
+	//The delay in seconds before the mobs are spawned in a dungeon
+	public static int DUNGEON_DELAY;
 
 	//The distance in blocks a player must within the finish point for the dungeon to be completed
-	public static int FINISH_DISTANCE = 0;
+	public static int FINISH_DISTANCE;
+	
+	//The distance a player must be from a mob for it to spawn
+	public static int MOB_SPAWN_DISTANCE;
 
 	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
 		return runningDungeons;
@@ -40,27 +43,26 @@ public class DeityDungeons extends DeityPlugin {
 	@Override
 	protected void initConfig() {
 		if(!this.getConfig().contains("dungeon-delay")) {
-			this.getConfig().set("dungeon-delay", 5000);
-			
-			try {
-				this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			this.getConfig().set("dungeon-delay", 5);
 		}
 		
 		if(!this.getConfig().contains("dungeon-finish-distance")) {
 			this.getConfig().set("dungeon-finish-distance", 3);
-			
-			try {
-				this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		}
+		
+		if(!this.getConfig().contains("mob-spawn-distance")) {
+			this.getConfig().set("mob-spawn-distance", 10);
+		}
+		
+		try {
+			this.getConfig().save(new File(this.getDataFolder(), "config.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		DUNGEON_DELAY = this.getConfig().getLong("dungeon-delay");
+		DUNGEON_DELAY = this.getConfig().getInt("dungeon-delay");
 		FINISH_DISTANCE = this.getConfig().getInt("dungeon-finish-distance");
+		MOB_SPAWN_DISTANCE = this.getConfig().getInt("mob-spawn-distance");
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class DeityDungeons extends DeityPlugin {
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL, `delay` INT (16) NOT NULL, " +
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
-				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL)");
+				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0)");
 
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon` VARCHAR (64) NOT NULL, `players` TEXT NOT NULL, " +
