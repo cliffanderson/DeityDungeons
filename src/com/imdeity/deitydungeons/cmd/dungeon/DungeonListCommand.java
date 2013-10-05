@@ -29,6 +29,11 @@ public class DungeonListCommand extends DeityCommandReceiver {
 	@Override
 	public boolean onPlayerRunCommand(Player player, String[] args) {
 		if(args.length == 1 && DungeonManager.dungeonExists(args[0])) {
+			if(DungeonManager.getDungeonByName(args[0]).getMobs().size() == 0) {
+				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>The dungeon <yellow>" + args[0] + " <red>contains no mobs");
+				return true;
+			}
+			
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>Mobs for dungeon <aqua>" + DungeonManager.getDungeonByName(args[0]).getName() + "<red>:");
 		
 			for(Mob mob : DungeonManager.getDungeonByName(args[0]).getMobs()) {
@@ -38,6 +43,11 @@ public class DungeonListCommand extends DeityCommandReceiver {
 			return true;
 		
 		}else if(args.length == 0) {
+			if(DungeonManager.getDungeons().size() == 0) {
+				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>There are no dungeons that currently exist");
+				return true;
+			}
+			
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>Dungeons:");
 			
 			for(Dungeon dungeon : DungeonManager.getDungeons()) {

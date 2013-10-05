@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+import org.bukkit.Material;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deitydungeons.DeityDungeons;
@@ -19,6 +23,8 @@ public class RunningDungeon {
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<Player> originalPlayers = new ArrayList<Player>();
 	ArrayList<Entity> entities = new ArrayList<Entity>();
+	
+	ArrayList<Mob> mobsToBeSpawned = new ArrayList<Mob>();
 	
 	Player player;
 	
@@ -33,6 +39,8 @@ public class RunningDungeon {
 		}
 		
 		this.start = new Date();
+		
+		mobsToBeSpawned = new ArrayList<Mob>(dungeon.getMobs());
 	}
 	
 	public boolean containsPlayer(Player player) {
@@ -125,12 +133,17 @@ public class RunningDungeon {
 		//See if they are close enough
 		if(distance <= DeityDungeons.FINISH_DISTANCE) {
 			//Player is close enough to win
+			
+			for(Player winner : originalPlayers) {
+				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(winner, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
+			}
+			
 			DungeonManager.notifyDungeonEnd(this);
 			return;
 		}
 		
 		//Dungeon has not ended, maybe we have to spawn a mob
-		for(Mob mob : dungeon.getMobs()) {
+		for(Mob mob : mobsToBeSpawned) {
 			//Vector of the player
 			Vector p1 = new Vector(playerAt.getBlockX(), playerAt.getBlockY(), playerAt.getBlockZ());
 			
@@ -145,6 +158,14 @@ public class RunningDungeon {
 				//Spawn the mob
 				Entity entity = dungeon.getWorld().spawnEntity(mob.getLocation(), mob.getType());
 				if(mob.getTarget()) ((Creature) entity).setTarget(player);
+				
+				EntityEquipment equip = ((LivingEntity) entity).getEquipment();
+				equip.setHelmet(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
+				equip.setChestplate(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_CHESTPLATE")));
+				equip.setLeggings(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_LEGGINGS")));
+				equip.setBoots(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_BOOTS"))); 
+
+				mobsToBeSpawned.remove(mob);
 				return;
 			}
 			

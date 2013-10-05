@@ -7,7 +7,8 @@ import org.bukkit.entity.EntityType;
 public class Mob {
 	String name;
 	EntityType type;
-	int health, helm, chest, pants, feet, x, y, z;
+	int health, x, y, z;
+	ArmorMaterial helm, chest, pants, feet;
 	Dungeon dungeon;
 	Location location;
 	World world;
@@ -16,7 +17,7 @@ public class Mob {
 	//False be default
 	boolean target;
 	
-	public Mob(String name, EntityType type, int health, int helm, int chest, int pants, int feet, Dungeon dungeon, int x, int y, int z, boolean target) {
+	public Mob(String name, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target) {
 		this.name = name;
 		this.type = type;
 		this.health = health;
@@ -88,35 +89,35 @@ public class Mob {
 		this.health = health;
 	}
 	
-	public int getHelm() {
+	public ArmorMaterial getHelm() {
 		return helm;
 	}
 	
-	public void setHelm(int helm) {
+	public void setHelm(ArmorMaterial helm) {
 		this.helm = helm;
 	}
 	
-	public int getChest() {
+	public ArmorMaterial getChest() {
 		return chest;
 	}
 	
-	public void setChest(int chest) {
+	public void setChest(ArmorMaterial chest) {
 		this.chest = chest;
 	}
 	
-	public int getPants() {
+	public ArmorMaterial getPants() {
 		return pants;
 	}
 	
-	public void setPants(int pants) {
+	public void setPants(ArmorMaterial pants) {
 		this.pants = pants;
 	}
 	
-	public int getFeet() {
+	public ArmorMaterial getFeet() {
 		return feet;
 	}
 	
-	public void setFeet(int feet) {
+	public void setFeet(ArmorMaterial feet) {
 		this.feet = feet;
 	}
 	

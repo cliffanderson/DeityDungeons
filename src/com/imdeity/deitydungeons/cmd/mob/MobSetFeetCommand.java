@@ -39,7 +39,7 @@ public class MobSetFeetCommand extends DeityCommandReceiver {
 		
 		DungeonManager.setMobArmor(mob, material, ArmorPiece.BOOTS);
 		
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have the set the chestplate for the mob " + mob.getName() + " to " + material.getName().toLowerCase());
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have the set the boots for the mob " + mob.getName() + " to " + material.getName().toLowerCase());
 
 		
 		return true;

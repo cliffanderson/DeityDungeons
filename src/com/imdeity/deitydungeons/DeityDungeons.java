@@ -12,6 +12,14 @@ import com.imdeity.deitydungeons.listeners.DungeonListener;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DeityDungeons extends DeityPlugin {
+	/*
+	 * Leather
+	 * Iron
+	 * Gold
+	 * Chain
+	 * Diamond
+	 * 
+	 */
 
 	public static DeityDungeons plugin;
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
@@ -77,8 +85,8 @@ public class DeityDungeons extends DeityPlugin {
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_info` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`name` VARCHAR (32) NOT NULL, `type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL," +
-				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` INT (16) NOT NULL, " +
-				"`chest` INT (16) NOT NULL, `legs` INT (16) NOT NULL, `boots` INT (16) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0)");
+				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` VARCHAR (1) NOT NULL, " +
+				"`chest` VARCHAR (1) NOT NULL, `legs` VARCHAR (1) NOT NULL, `boots` VARCHAR (1) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0)");
 
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon` VARCHAR (64) NOT NULL, `players` TEXT NOT NULL, " +

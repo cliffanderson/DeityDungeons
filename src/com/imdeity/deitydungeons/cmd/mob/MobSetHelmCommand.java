@@ -39,7 +39,7 @@ public class MobSetHelmCommand extends DeityCommandReceiver {
 		
 		DungeonManager.setMobArmor(mob, material, ArmorPiece.HELMET);
 		
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have the set the chestplate for the mob " + mob.getName() + " to " + material.getName().toLowerCase());
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You have the set the helmet for the mob " + mob.getName() + " to " + material.getName().toLowerCase());
 
 		
 		return true;

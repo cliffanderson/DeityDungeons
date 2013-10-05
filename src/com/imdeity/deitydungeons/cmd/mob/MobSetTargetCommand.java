@@ -25,7 +25,7 @@ public class MobSetTargetCommand extends DeityCommandReceiver {
 			return true;
 		}
 			
-		String flag = args[1];
+		String flag = args[0];
 		
 		if(flag.equalsIgnoreCase("true") || flag.equalsIgnoreCase("t") || flag.equalsIgnoreCase("1")) {
 			DungeonManager.setMobTarget(DungeonManager.getPlayersMob(player), true);

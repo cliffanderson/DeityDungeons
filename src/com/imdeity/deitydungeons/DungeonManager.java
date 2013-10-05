@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -103,16 +102,16 @@ public class DungeonManager {
 						String typeName = mobResults.getString(i, "type");
 						EntityType type = EntityType.fromName(typeName);
 						int health = mobResults.getInteger(i, "health");
-						int helm = mobResults.getInteger(i, "helm");
-						int chest = mobResults.getInteger(i, "chest");
-						int pants = mobResults.getInteger(i, "legs");
-						int feet = mobResults.getInteger(i, "boots");
+						String helm = mobResults.getString(i, "helm");
+						String chest = mobResults.getString(i, "chest");
+						String pants = mobResults.getString(i, "legs");
+						String feet = mobResults.getString(i, "boots");
 						int mobx = mobResults.getInteger(i, "x");
 						int moby = mobResults.getInteger(i, "y");
 						int mobz = mobResults.getInteger(i, "z");
 						boolean target = mobResults.getInteger(i, "target") == 0 ? false : true;
 						
-						Mob mob = new Mob(mobName, type, health, helm, chest, pants, feet, getDungeonByID(dungeonID), mobx, moby, mobz, target);
+						Mob mob = new Mob(mobName, type, health, ArmorMaterial.getByChar(helm.charAt(0)), ArmorMaterial.getByChar(chest.charAt(0)), ArmorMaterial.getByChar(pants.charAt(0)), ArmorMaterial.getByChar(feet.charAt(0)), getDungeonByID(dungeonID), mobx, moby, mobz, target);
 
 						//Add the mob to the dungeon
 						getDungeonByID(dungeonID).addMob(mob);
@@ -198,8 +197,9 @@ public class DungeonManager {
 
 		//Put dungeon info in the main dungeon list table
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_list` (`dungeon_id`, `name`, `world`, `x`, `y`, `z`, `yaw`, `pitch`, `fx`, `fy`, `fz`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				dungeonID, name, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch());
+				dungeonID, name, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
 
+		System.out.println("put " + name + " into mysql");
 		//Table for the mob info
 		//DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS " + DeityDungeons.tableName(name) + " (`id` INT(16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` VARCHAR(32) NOT NULL, `type` VARCHAR(32) NOT NULL, `health` INT(16) NOT NULL, " +
 		//		"`helm` INT(8) NOT NULL, `chest` INT(8) NOT NULL, `pants` INT(8) NOT NULL, `feet` INT(8) NOT NULL, `x` INT(8) NOT NULL, `y` INT(8) NOT NULL, `z` INT(8) NOT NULL)");
@@ -247,20 +247,20 @@ public class DungeonManager {
 	public static void setMobArmor(Mob mob, ArmorMaterial material, ArmorPiece armor) {
 		switch(armor) {
 		case HELMET:
-			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `helm`=? WHERE `dungeon_id`=? AND `name`=?", Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId(), mob.getDungeon().getID(), mob.getName());
-			mob.setHelm(Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId());
+			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `helm`=? WHERE `dungeon_id`=? AND `name`=?", ArmorMaterial.getChar(material), mob.getDungeon().getID(), mob.getName());
+			mob.setHelm(material);
 			break;
 		case CHESTPLATE:
-			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `chest`=? WHERE `dungeon_id`=? AND `name`=?", Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId(), mob.getDungeon().getID(), mob.getName());
-			mob.setChest(Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId());
+			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `chest`=? WHERE `dungeon_id`=? AND `name`=?", ArmorMaterial.getChar(material), mob.getDungeon().getID(), mob.getName());
+			mob.setChest(material);
 			break;
 		case LEGGINGS:
-			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `legs`=? WHERE `dungeon_id`=? AND `name`=?", Material.getMaterial(material.getName().toUpperCase() + "_" +armor.getName().toUpperCase()).getId(), mob.getDungeon().getID(), mob.getName());
-			mob.setPants(Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId());
+			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `legs`=? WHERE `dungeon_id`=? AND `name`=?", ArmorMaterial.getChar(material), mob.getDungeon().getID(), mob.getName());
+			mob.setPants(material);
 			break;
 		case BOOTS:
-			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `boots`=? WHERE `dungeon_id`=? AND `name`=?", Material.getMaterial(material.getName().toUpperCase() + "_" +armor.getName().toUpperCase()).getId(), mob.getDungeon().getID(), mob.getName());
-			mob.setFeet(Material.getMaterial(material.getName().toUpperCase() + "_" + armor.getName().toUpperCase()).getId());
+			DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `boots`=? WHERE `dungeon_id`=? AND `name`=?", ArmorMaterial.getChar(material), mob.getDungeon().getID(), mob.getName());
+			mob.setFeet(material);
 			break;
 		}
 	}
@@ -320,19 +320,19 @@ public class DungeonManager {
 		
 		Date now = new Date();
 		
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_log` (`dungeon`, `players`, `start`, `end`, `seconds`) VALUES (?, ?, ?, ?)", dungeon.getName(), playerList, start, now, (int)(now.getTime() - start.getTime()));
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_log` (`dungeon`, `players`, `start`, `end`, `seconds`) VALUES (?, ?, ?, ?, ?)", dungeon.getName(), playerList, start, now, (int)(now.getTime() - start.getTime()) / 1000);
 	}
 
 	public static void setDungeonFinish(Dungeon dungeon, int x, int y, int z) {
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_list` SET `fx`=?, `fy`=,? `fz`=? WHERE `dungeon_id`=? AND `name`=?", x, y, z, dungeon.getID(), dungeon.getName());
-		
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_list` SET `fx`=?, `fy`=?, `fz`=? WHERE `dungeon_id`=? AND `name`=?", x, y, z, dungeon.getID(), dungeon.getName());
+
 		//memory
 		dungeon.setDungeonFinish(x, y, z);
 	}
 	
 	public static void startDungeon(final Dungeon dungeon, final Player[] players) {
 		for(Player player : players) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<yellow>The dungeon <red>" + dungeon.getName() + " <yellow> will be starting in " + DeityDungeons.DUNGEON_DELAY + (DeityDungeons.DUNGEON_DELAY == 1 ? "second" : "seconds"));
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<yellow>The dungeon <red>" + dungeon.getName() + " <yellow> will be starting in " + DeityDungeons.DUNGEON_DELAY + (DeityDungeons.DUNGEON_DELAY == 1 ? " second" : " seconds"));
 			player.teleport(dungeon.getSpawn());
 		}
 		
@@ -340,7 +340,7 @@ public class DungeonManager {
 
 			public void run() {
 				try {
-					Thread.sleep(DeityDungeons.DUNGEON_DELAY);
+					Thread.sleep(DeityDungeons.DUNGEON_DELAY * 1000); //delay is in seconds, we need milliseconds
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -356,5 +356,16 @@ public class DungeonManager {
 		DeityDungeons.getRunningDungeons().remove(running);
 		DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
 		DungeonManager.addDungeonRunRecord(running.getDungeon(), running.getStart(), running.getOriginalPlayers());
+	}
+
+	public static void deleteDungeon(Dungeon dungeon) {
+		//Remove dungeon in memory
+		dungeons.remove(dungeon.getName());
+		
+		//sql dungeon list
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE FROM `dungeon_list` WHERE `id`=? ", dungeon.getID());
+		
+		//sql dungeon info (mob list)
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE FROM `dungeon_info` WHERE `id`=?", dungeon.getID());	
 	}
 }

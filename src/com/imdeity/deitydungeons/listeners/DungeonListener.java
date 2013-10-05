@@ -60,6 +60,10 @@ public class DungeonListener extends DeityListener {
 		for(RunningDungeon runningDungeon : DeityDungeons.getRunningDungeons()) {
 			if(runningDungeon.containsPlayer(event.getPlayer())) {
 				runningDungeon.handleMove(event.getPlayer(), event.getTo());
+				
+				//Prevents concurrent modifcation exceptions, as a move event can lead to the 
+				//end of a dungeon, this removing the dungeon from the list
+				break; 
 			}
 		}
 	}

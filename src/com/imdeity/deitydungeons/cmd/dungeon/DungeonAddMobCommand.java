@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityCommandReceiver;
 import com.imdeity.deitydungeons.DungeonManager;
+import com.imdeity.deitydungeons.obj.ArmorMaterial;
 import com.imdeity.deitydungeons.obj.Dungeon;
 import com.imdeity.deitydungeons.obj.Mob;
 
@@ -50,7 +51,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 		}
 		
 		//Finally everything has been checked and we can add the mob
-		Mob mob = new Mob(mobName, entity, 0, 0, 0, 0, 0, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false);
+		Mob mob = new Mob(mobName, entity, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false);
 		DungeonManager.addMobToDungeon(player, mob);
 		
 		//Tell the player mob addition was successful

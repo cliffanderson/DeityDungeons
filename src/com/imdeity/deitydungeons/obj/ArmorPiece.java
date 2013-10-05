@@ -22,4 +22,14 @@ public enum ArmorPiece {
 		
 		return null;
 	}
+	/*
+	public static String getPiece(ArmorPiece ap) { 
+		switch(ap) {
+		case HELMET: return ap.getName();
+		case CHESTPLATE: return ap.getName();
+		case LEGGINGS: return ap.getName();
+		case BOOTS: return ap.getName();
+		default: return null;
+		}
+	}*/
 }
