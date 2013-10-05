@@ -1,16 +1,22 @@
 package com.imdeity.deitydungeons.obj;
 
 public enum ArmorMaterial {
-	AIR("AIR"), LEATHER("LEATHER"), CHAINMAIL("CHAINMAIL"), IRON("IRON"), GOLD("GOLD"), DIAMOND("DIAMOND");
+	AIR("AIR", "A"), LEATHER("LEATHER", "L"), CHAINMAIL("CHAINMAIL", "C"), IRON("IRON", "I"), GOLD("GOLD", "G"), DIAMOND("DIAMOND", "D");
 
 	private String name;
-
-	private ArmorMaterial(String name) {
+	private String c;
+	
+	private ArmorMaterial(String name, String c) {
 		this.name = name;
+		this.c = c;
 	}
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getChar() {
+		return c;
 	}
 
 	public static ArmorMaterial getByName(String name) {

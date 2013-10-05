@@ -219,7 +219,7 @@ public class DungeonManager {
 	public static void addMobToDungeon(Player player, Mob mob) {
 		//sql
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `name`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				mob.getDungeon().getID(), mob.getName(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm(), mob.getChest(), mob.getPants(), mob.getFeet());
+				mob.getDungeon().getID(), mob.getName(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm().getChar(), mob.getChest().getChar(), mob.getPants().getChar(), mob.getFeet().getChar());
 
 		//for dungeon in memory
 		mob.getDungeon().addMob(mob);

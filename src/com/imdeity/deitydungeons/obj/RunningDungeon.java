@@ -160,11 +160,10 @@ public class RunningDungeon {
 				if(mob.getTarget()) ((Creature) entity).setTarget(player);
 				
 				EntityEquipment equip = ((LivingEntity) entity).getEquipment();
-				equip.setHelmet(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
-				equip.setChestplate(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_CHESTPLATE")));
-				equip.setLeggings(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_LEGGINGS")));
-				equip.setBoots(new ItemStack(Material.getMaterial(mob.getHelm().getName() + "_BOOTS"))); 
-
+				equip.setHelmet(new ItemStack(mob.getHelm() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
+				equip.setChestplate(new ItemStack(mob.getChest() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getChest().getName() + "_CHESTPLATE")));
+				equip.setLeggings(new ItemStack(mob.getPants() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getPants().getName() + "_LEGGINGS")));
+				equip.setBoots(new ItemStack(mob.getFeet() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getFeet().getName() + "_BOOTS"))); 
 				mobsToBeSpawned.remove(mob);
 				return;
 			}

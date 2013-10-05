@@ -45,7 +45,8 @@ public class DungeonStartCommand extends DeityCommandReceiver {
 		Dungeon dungeon = DungeonManager.getDungeonByName(args[0]);
 		
 		//Make sure dungeon finish has been set (coords cannot be -1, -1 and -1)
-		if(dungeon.getSpawn().getBlockX() == -1 && dungeon.getSpawn().getBlockY() == -1 && dungeon.getSpawn().getBlockZ() == -1) {
+		System.out.println(dungeon.getSpawn().getBlockX() + " " +  dungeon.getSpawn().getBlockY() + " " +  dungeon.getSpawn().getBlockZ());
+		if(dungeon.getFinishX() == -1 && dungeon.getFinishY() == -1 && dungeon.getFinishZ() == -1) {
 			DeityAPI.getAPI().getChatAPI().outWarn("DeityDungeons", "Error: The finish point of the dungeon " + dungeon.getName() + " has not been set. " +
 					"Please use the command /dungeon setfinish to set the finish and be able to play the dungeon");
 			return true;
