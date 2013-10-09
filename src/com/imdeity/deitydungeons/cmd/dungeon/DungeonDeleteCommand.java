@@ -7,6 +7,9 @@ import com.imdeity.deityapi.api.DeityCommandReceiver;
 import com.imdeity.deitydungeons.DungeonManager;
 
 public class DungeonDeleteCommand extends DeityCommandReceiver {
+	/*
+	 * This command can erase a lot of work if a dungeon is accidentally deleted
+	 */
 
 	@Override
 	public boolean onConsoleRunCommand(String[] arg0) {

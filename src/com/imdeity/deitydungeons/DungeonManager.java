@@ -313,10 +313,10 @@ public class DungeonManager {
 		String playerList = "";
 		
 		for(Player player : players) {
-			playerList += player.getName() + " ";
+			playerList += player.getName() + ", ";
 		}
 		
-		playerList = playerList.trim();
+		playerList = playerList.substring(0, playerList.length() - 2);
 		
 		Date now = new Date();
 		
