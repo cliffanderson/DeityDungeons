@@ -56,6 +56,8 @@ public class RunningDungeon {
 		players.remove(player);
 	}
 	
+	//Mobs can be left in the world after the
+	//dungeon ends, this removes them
 	public void removeAllMobs() {
 		for(Entity entity : entities) {
 			entity.remove();
@@ -106,7 +108,7 @@ public class RunningDungeon {
 				//Players have won
 				for(Player p : originalPlayers) {
 					if(p.isOnline())
-						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "Congratulations! You have won!");
+						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
 				}
 				
 				DungeonManager.notifyDungeonEnd(this);
@@ -165,6 +167,7 @@ public class RunningDungeon {
 				equip.setLeggings(new ItemStack(mob.getPants() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getPants().getName() + "_LEGGINGS")));
 				equip.setBoots(new ItemStack(mob.getFeet() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getFeet().getName() + "_BOOTS"))); 
 				mobsToBeSpawned.remove(mob);
+				entities.add(entity);
 				return;
 			}
 			
