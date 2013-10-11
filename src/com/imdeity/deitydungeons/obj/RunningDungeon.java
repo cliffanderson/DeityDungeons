@@ -20,6 +20,7 @@ import com.imdeity.deitydungeons.DungeonManager;
 //Represents a running dungeon
 public class RunningDungeon {
 	Dungeon dungeon;
+	
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<Player> originalPlayers = new ArrayList<Player>();
 	ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -103,20 +104,9 @@ public class RunningDungeon {
 	public boolean notifyDeathOfMob(Entity e) {
 		if(entities.contains(e)) {
 			entities.remove(e);
-			
-			if(entities.size() == 0) {
-				//Players have won
-				for(Player p : originalPlayers) {
-					if(p.isOnline())
-						DeityAPI.getAPI().getChatAPI().sendPlayerMessage(p, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
-				}
-				
-				DungeonManager.notifyDungeonEnd(this);
-				return true;
-			}
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public void handleMove(Player player, Location playerAt) {
@@ -140,6 +130,7 @@ public class RunningDungeon {
 				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(winner, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
 			}
 			
+			removeAllMobs();
 			DungeonManager.notifyDungeonEnd(this);
 			return;
 		}

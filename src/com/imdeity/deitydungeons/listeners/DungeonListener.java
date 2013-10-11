@@ -26,6 +26,8 @@ public class DungeonListener extends DeityListener {
 
 				if(!rd.hasPlayers()) {
 					rd.removeAllMobs();
+					DeityDungeons.getRunningDungeons().remove(rd);
+					DeityDungeons.getRunningDungeonNames().remove(rd.getDungeon().getName());
 				}
 			}
 		}

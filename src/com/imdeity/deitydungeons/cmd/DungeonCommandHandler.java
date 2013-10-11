@@ -27,5 +27,4 @@ public class DungeonCommandHandler extends DeityCommandHandler {
 		this.registerCommand("setfinish", new String[]{"finish"}, "", "Sets the finish point of the dungeon", new DungeonSetFinishCommand(), "dungeon.setfinish");
 		this.registerCommand("delete", new String[]{}, "<dungeon name>", "DELETES an entire dungeon, including all of the mobs", new DungeonDeleteCommand(), "dungeon.delete");
 	}
-
 }
