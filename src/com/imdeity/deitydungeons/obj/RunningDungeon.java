@@ -44,6 +44,10 @@ public class RunningDungeon {
 		mobsToBeSpawned = new ArrayList<Mob>(dungeon.getMobs());
 	}
 	
+	public ArrayList<Entity> getSpawnedEntities() {
+		return entities;
+	}
+	
 	public boolean containsPlayer(Player player) {
 		//This will be an alive player
 		return players.contains(player);

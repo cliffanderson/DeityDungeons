@@ -9,6 +9,7 @@ import com.imdeity.deitydungeons.cmd.dungeon.DungeonRemoveMobCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonSelectCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonSetFinishCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonStartCommand;
+import com.imdeity.deitydungeons.cmd.dungeon.DungeonStopCommand;
 
 public class DungeonCommandHandler extends DeityCommandHandler {
 
@@ -26,5 +27,6 @@ public class DungeonCommandHandler extends DeityCommandHandler {
 		this.registerCommand("list", new String[]{"l"}, "", "Lists the created dungeons", new DungeonListCommand(), "dungeon.list");
 		this.registerCommand("setfinish", new String[]{"finish"}, "", "Sets the finish point of the dungeon", new DungeonSetFinishCommand(), "dungeon.setfinish");
 		this.registerCommand("delete", new String[]{}, "<dungeon name>", "DELETES an entire dungeon, including all of the mobs", new DungeonDeleteCommand(), "dungeon.delete");
+		this.registerCommand("stop", new String[]{"s"}, "<dungeon name>", "Stops a dungeon", new DungeonStopCommand(), "dungeon.stop");
 	}
 }
