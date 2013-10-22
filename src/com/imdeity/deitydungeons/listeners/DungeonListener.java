@@ -13,31 +13,32 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import com.imdeity.deityapi.api.DeityListener;
 import com.imdeity.deitydungeons.Cloud;
 import com.imdeity.deitydungeons.DeityDungeons;
+import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonListener extends DeityListener {
 
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-			if(rd.containsPlayer(player)) {
-				Cloud.onPlayerDisconnect(player.getName());
-			}
+	public void onPlayerDisconnect(PlayerQuitEvent event) {
+		if(DungeonManager.playerIsRunningDungeon(event.getPlayer())) {
+			Cloud.onPlayerDisconnect(event.getPlayer().getName());
 		}
 	}	
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
+		
+		//Player
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
-				if(rd.notifyDeath(player)) {
+				if(rd.containsPlayer(player)) {
 					Cloud.onPlayerDeath(player.getName());
 					break;
 				}
 			}
+		//Mob
 		}else{
 			Entity e = (Entity) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
@@ -61,12 +62,22 @@ public class DungeonListener extends DeityListener {
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		for(RunningDungeon running : DeityDungeons.getRunningDungeons()) {
+			if(running.containsPlayer(event.getPlayer())) {
+				event.getPlayer().teleport(running.getDungeon().getSpawn());
+			}
+		}
 		
 		Cloud.onPlayerJoin(event.getPlayer().getName());
 	}
 	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		for(RunningDungeon running : DeityDungeons.getRunningDungeons()) {
+			if(running.containsPlayer(event.getPlayer())) {
+				event.getPlayer().teleport(running.getDungeon().getSpawn());
+			}
+		}
 		
 		Cloud.onPlayerRespawn(event.getPlayer().getName());
 	}

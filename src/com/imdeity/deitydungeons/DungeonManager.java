@@ -340,14 +340,6 @@ public class DungeonManager {
 		Cloud.onDungeonStart(players, dungeon.getID());
 	}
 
-	public static void notifyDungeonEnd(RunningDungeon running) {
-		DeityDungeons.getRunningDungeons().remove(running);
-		DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
-		addDungeonRunRecord(running.getDungeon(), running.getStart(), running.getOriginalPlayers());
-	
-		Cloud.onDungeonComplete((Player[])running.getOriginalPlayers().toArray(), running.getDungeon().getID());
-	}
-
 	public static void deleteDungeon(Dungeon dungeon) {
 		//Remove dungeon in memory
 		dungeons.remove(dungeon.getName());
