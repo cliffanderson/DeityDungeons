@@ -18,7 +18,6 @@ public class DeityDungeons extends DeityPlugin {
 	 * Gold
 	 * Chain
 	 * Diamond
-	 * 
 	 */
 
 	public static DeityDungeons plugin;
