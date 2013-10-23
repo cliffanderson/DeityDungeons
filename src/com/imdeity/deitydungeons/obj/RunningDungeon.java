@@ -6,6 +6,7 @@ import java.util.Date;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class RunningDungeon {
 	}
 
 	public boolean containsPlayer(Player player) {
-		//This will be an alive player
+		//This will be an active player
 		return players.contains(player);
 	}
 
@@ -112,11 +113,15 @@ public class RunningDungeon {
 
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
 			
+			//is player active in the dungeon?
+			if(players.contains(player)) {
+				//remove them from the list so they only get the message once
+				players.remove(player);
+			}
 			Cloud.playerFinishedDungeon(player, dungeon.getID());
-			return;
 		}
 
-		//Dungeon has not ended, maybe we have to spawn a mob
+		//maybe we have to spawn a mob
 		for(Mob mob : mobsToBeSpawned) {
 			//Vector of the player
 			Vector p1 = new Vector(playerAt.getBlockX(), playerAt.getBlockY(), playerAt.getBlockZ());
@@ -138,10 +143,18 @@ public class RunningDungeon {
 				equip.setChestplate(new ItemStack(mob.getChest() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getChest().getName() + "_CHESTPLATE")));
 				equip.setLeggings(new ItemStack(mob.getPants() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getPants().getName() + "_LEGGINGS")));
 				equip.setBoots(new ItemStack(mob.getFeet() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getFeet().getName() + "_BOOTS"))); 
+				
+				if(mob.getHealth() > 0) {
+					((Damageable)entity).setMaxHealth(mob.getHealth());
+					((Damageable)entity).setHealth(mob.getHealth());
+				}
+				
 				mobsToBeSpawned.remove(mob);
 				entities.add(entity);
-				return;
 			}
+			
+			//prevents concurrent modification exception
+			break;
 
 		}
 	}

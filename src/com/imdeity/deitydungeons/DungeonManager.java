@@ -298,13 +298,37 @@ public class DungeonManager {
 	public static boolean playerHasMob(Player player) {
 		return getPlayersMob(player) != null;
 	}
-
+	
+	//If a player is CURRENTLY running a dungeon, and has not finished yet
 	public static boolean playerIsRunningDungeon(Player player) {
 		for(RunningDungeon d : DeityDungeons.getRunningDungeons()) {
 			if(d.containsPlayer(player)) return true;
 		}
 
 		return false;
+	}
+	
+	//gets the dungeon that a player was a part of, regardless is they have finished or not
+	public static RunningDungeon getPlayersRunningDungeon(Player player) {
+		for(RunningDungeon d : DeityDungeons.getRunningDungeons()) {
+			if(d.getOriginalPlayers().contains(player)) {
+				return d;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static void endDungeon(RunningDungeon running) {
+		//kill all living mobs
+		running.removeAllMobs();
+		
+		//"end" dungeon
+		DeityDungeons.getRunningDungeons().remove(running);
+		DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
+		
+		//add record in database
+		addDungeonRunRecord(running.getDungeon(), running.getStart(), running.getOriginalPlayers());
 	}
 
 	public static void addDungeonRunRecord(Dungeon dungeon, Date start, ArrayList<Player> players) {

@@ -25,7 +25,9 @@ public class Cloud {
 	}
 	
 	public static void playerFinishedDungeon(Player player, int dungeonID) {
-		
+		//if the dungeon is complete, run this line of code
+		//this adds a record in the database and removes all spawned mobs that were not killed by players
+		DungeonManager.endDungeon(DungeonManager.getPlayersRunningDungeon(player));
 	}
 
 }
