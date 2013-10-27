@@ -37,7 +37,7 @@ public class DungeonListCommand extends DeityCommandReceiver {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>Mobs for dungeon <aqua>" + DungeonManager.getDungeonByName(args[0]).getName() + "<red>:");
 		
 			for(Mob mob : DungeonManager.getDungeonByName(args[0]).getMobs()) {
-				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", mob.getName() + " - " + mob.getType().toString());
+				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", mob.getID() + " - " + mob.getType().toString());
 			}
 			
 			return true;

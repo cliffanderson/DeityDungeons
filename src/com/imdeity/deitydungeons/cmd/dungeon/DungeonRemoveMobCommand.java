@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityCommandReceiver;
+import com.imdeity.deitydungeons.DeityDungeons;
 import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.Dungeon;
 
@@ -16,31 +17,48 @@ public class DungeonRemoveMobCommand extends DeityCommandReceiver {
 
 	@Override
 	public boolean onPlayerRunCommand(Player player, String[] args) {
-		if(args.length != 1) return false;
+		//dungeon removemob dungeon id
+		//dungeon removemob id
 
-		//Make sure the player has a selected dungeon
-		if(!DungeonManager.playerHasDungeon(player)) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "You first must select a dungeon");
+		if(args.length == 2 && DeityDungeons.isInt(args[1]) && DungeonManager.dungeonExists(args[0])) {
+			//Get the dungeon
+			Dungeon dungeon = DungeonManager.getDungeonByName(args[0]);		
+			int id = Integer.parseInt(args[1]);
+
+
+			//Make sure the dungeon has the mob
+			if(!dungeon.hasMob(id)) {
+				DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " does not have a mob with id " + id);
+				return true;
+			}
+
+			//Finally everything has been checked and we can remove the mob
+			DungeonManager.removeMobFromDungeon(dungeon.getMobByID(id), player);
+
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The mob with id " + args[1] + " has been removed from the dungeon " + dungeon.getName());
+
+			return true;
+		}else if(args.length == 1 && DeityDungeons.isInt(args[0]) && DungeonManager.playerHasDungeon(player)) {
+			//Get the dungeon
+			Dungeon dungeon = DungeonManager.getPlayersDungeon(player);		
+			int id = Integer.parseInt(args[0]);
+
+
+			//Make sure the dungeon has the mob
+			if(!dungeon.hasMob(id)) {
+				DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " does not have a mob with id " + id);
+				return true;
+			}
+
+			//Finally everything has been checked and we can remove the mob
+			DungeonManager.removeMobFromDungeon(dungeon.getMobByID(id), player);
+
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The mob with id " + args[0] + " has been removed from the dungeon " + dungeon.getName());
+
+			return true;
+		}else{
+			DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "Usage: /dungeon removemob <dungeon> <id>");
 			return true;
 		}
-
-		//Get the dungeon
-		Dungeon dungeon = DungeonManager.getPlayersDungeon(player);		
-		String mobName = args[0];
-
-		
-		//Make sure the mob name is in use
-		if(!dungeon.hasMob(mobName)) {
-			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon " + dungeon.getName() + " does not have the mob " + mobName);
-			return true;
-		}
-
-		//Finally everything has been checked and we can remove the mob
-		DungeonManager.removeMobFromDungeon(dungeon.getMobByName(mobName), player);
-		
-		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The mob " + mobName + " has been removed from the dungeon " + dungeon.getName());
-
-		return true;
 	}
-
 }

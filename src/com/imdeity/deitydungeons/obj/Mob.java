@@ -5,9 +5,8 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 
 public class Mob {
-	String name;
 	EntityType type;
-	int health, x, y, z;
+	int id, health, x, y, z;
 	ArmorMaterial helm, chest, pants, feet;
 	Dungeon dungeon;
 	Location location;
@@ -17,8 +16,8 @@ public class Mob {
 	//False be default
 	boolean target;
 	
-	public Mob(String name, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target) {
-		this.name = name;
+	public Mob(int id, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target) {
+		this.id = id;
 		this.type = type;
 		this.health = health;
 		this.helm = helm;
@@ -35,6 +34,10 @@ public class Mob {
 		location = new Location(world, x, y, z);
 		
 		this.target = target;
+	}
+	
+	public int getID() {
+		return this.id;
 	}
 	
 	public Location getLocation() {
@@ -63,14 +66,6 @@ public class Mob {
 	
 	public void setZ(int z) {
 		location = new Location(world, x, y, z);
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public EntityType getType() {

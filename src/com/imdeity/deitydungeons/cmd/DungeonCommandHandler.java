@@ -4,6 +4,7 @@ import com.imdeity.deityapi.api.DeityCommandHandler;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonAddMobCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonCreateCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonDeleteCommand;
+import com.imdeity.deitydungeons.cmd.dungeon.DungeonEditMobCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonListCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonRemoveMobCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonSelectCommand;
@@ -28,5 +29,6 @@ public class DungeonCommandHandler extends DeityCommandHandler {
 		this.registerCommand("setfinish", new String[]{"finish"}, "", "Sets the finish point of the dungeon", new DungeonSetFinishCommand(), "dungeon.setfinish");
 		this.registerCommand("delete", new String[]{}, "<dungeon name>", "DELETES an entire dungeon, including all of the mobs", new DungeonDeleteCommand(), "dungeon.delete");
 		this.registerCommand("stop", new String[]{"s"}, "<dungeon name>", "Stops a dungeon", new DungeonStopCommand(), "dungeon.stop");
+		this.registerCommand("editmob", new String[]{}, "<dungeon> <mobid> <helm> <chest> <legs> <boots> <health> <type> <target>", "Edits all of the attributes of a mob", new DungeonEditMobCommand(), "dungeon.editmob");
 	}
 }

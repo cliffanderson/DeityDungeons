@@ -59,18 +59,18 @@ public class Dungeon {
 		mobs.remove(mob);
 	}
 	
-	public boolean hasMob(String name) {
+	public boolean hasMob(int id) {
 		for(Mob mob : mobs) {
-			if(mob.getName().equals(name)) {
+			if(mob.getID() == id) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public Mob getMobByName(String name) {
+	public Mob getMobByID(int id) {
 		for(Mob mob : mobs) {
-			if(mob.getName().equals(name)) {
+			if(mob.getID() == id) {
 				return mob;
 			}
 		}
