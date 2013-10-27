@@ -6,5 +6,3 @@ main: com.imdeity.deitydungeons.DeityDungeons
 commands:
     dungeon:
         aliases: [d]
-    mob:
-        aliases: [m]
