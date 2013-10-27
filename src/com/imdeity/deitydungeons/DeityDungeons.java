@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityPlugin;
 import com.imdeity.deitydungeons.cmd.DungeonCommandHandler;
-import com.imdeity.deitydungeons.cmd.MobCommandHandler;
 import com.imdeity.deitydungeons.listeners.DungeonListener;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
@@ -44,7 +43,6 @@ public class DeityDungeons extends DeityPlugin {
 	@Override
 	protected void initCmds() {
 		registerCommand(new DungeonCommandHandler("DeityDungeons", "dungeon"));
-		registerCommand(new MobCommandHandler("DeityDungeons", "mob"));
 	}
 
 	@Override
