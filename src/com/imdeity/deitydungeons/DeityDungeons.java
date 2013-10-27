@@ -23,9 +23,6 @@ public class DeityDungeons extends DeityPlugin {
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
 	private static ArrayList<String> runningDungeonNames = new ArrayList<String>();
 
-	//The delay in seconds before the mobs are spawned in a dungeon
-	public static int DUNGEON_DELAY;
-
 	//The distance in blocks a player must within the finish point for the dungeon to be completed
 	public static int FINISH_DISTANCE;
 	
@@ -46,11 +43,7 @@ public class DeityDungeons extends DeityPlugin {
 	}
 
 	@Override
-	protected void initConfig() {
-		if(!this.getConfig().contains("dungeon-delay")) {
-			this.getConfig().set("dungeon-delay", 5);
-		}
-		
+	protected void initConfig() {		
 		if(!this.getConfig().contains("dungeon-finish-distance")) {
 			this.getConfig().set("dungeon-finish-distance", 3);
 		}
@@ -65,7 +58,6 @@ public class DeityDungeons extends DeityPlugin {
 			e.printStackTrace();
 		}
 
-		DUNGEON_DELAY = this.getConfig().getInt("dungeon-delay");
 		FINISH_DISTANCE = this.getConfig().getInt("dungeon-finish-distance");
 		MOB_SPAWN_DISTANCE = this.getConfig().getInt("mob-spawn-distance");
 	}
