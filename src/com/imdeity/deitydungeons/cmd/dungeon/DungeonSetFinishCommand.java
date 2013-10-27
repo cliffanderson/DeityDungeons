@@ -28,6 +28,13 @@ public class DungeonSetFinishCommand extends DeityCommandReceiver {
 			return true;
 		} else if(args.length == 1 && !DungeonManager.dungeonExists(args[0])){
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The dungeon <red>" + args[0] + " <white>does not exist.");
+		}else if(args.length == 0 && DungeonManager.playerHasDungeon(player)) {
+			Dungeon dungeon = DungeonManager.getPlayersDungeon(player);
+			Location l = player.getLocation();
+			DungeonManager.setDungeonFinish(dungeon, l.getBlockX(), l.getBlockY(), l.getBlockZ());
+			
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "The finish point for dungeon <red>" + dungeon.getName() + " <white>has been set to your location");
+		
 		}else{
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "Correct usage: <red>/dungeon setfinish <dungeonname>");
 			return true;

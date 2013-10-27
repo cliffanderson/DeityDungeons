@@ -31,6 +31,8 @@ public class DungeonDeleteCommand extends DeityCommandReceiver {
 		
 		//The dungeon given in the arguments exists, let's delete it
 		DungeonManager.deleteDungeon(DungeonManager.getDungeonByName(dungeon));
+		
+		DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The dungeon <red>" + dungeon + " <green>was successfully deleted");
 		return true;
 	}
 

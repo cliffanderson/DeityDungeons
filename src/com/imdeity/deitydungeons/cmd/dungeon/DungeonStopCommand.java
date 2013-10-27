@@ -32,6 +32,7 @@ public class DungeonStopCommand extends DeityCommandReceiver {
 			if(running.getDungeon().getName().equals(args[0])) {
 				//This dungeon needs to be stopped
 				DeityDungeons.getRunningDungeons().remove(running);
+				DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
 				
 				for(Entity entity : running.getSpawnedEntities()) {
 					entity.remove();

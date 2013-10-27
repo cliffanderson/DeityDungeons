@@ -55,6 +55,9 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 			}else{
 				DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "Usage: /dungeon editmob <dungeon> <mobid> <helm> <chest> <legs> <boots> <health> <type> <target>");
 			}
+			
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The mob attributes have been set for mob with id <red>" + args[1]);
+			return true;
 
 			//Already having a dungeon selected
 		}else if(args.length == 8 &&
@@ -86,6 +89,9 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 			}else{
 				DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "Usage: /dungeon editmob <dungeon> <mobid> <helm> <chest> <legs> <boots> <health> <type> <target>");
 			}
+			
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>The mob attributes have been set for mob with id <red>" + args[1]);
+			return true;
 
 		}
 		
