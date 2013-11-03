@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.bukkit.entity.Entity;
+
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityPlugin;
 import com.imdeity.deitydungeons.cmd.DungeonCommandHandler;
@@ -37,6 +39,15 @@ public class DeityDungeons extends DeityPlugin {
 		return runningDungeonNames;
 	}
 
+	@Override
+	public void onDisable() {
+		for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
+			for(Entity e : rd.getSpawnedEntities()) {
+				e.remove();
+			}
+		}
+	}
+	
 	@Override
 	protected void initCmds() {
 		registerCommand(new DungeonCommandHandler("DeityDungeons", "dungeon"));
@@ -77,7 +88,7 @@ public class DeityDungeons extends DeityPlugin {
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL," +
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` VARCHAR (1) NOT NULL, " +
-				"`chest` VARCHAR (1) NOT NULL, `legs` VARCHAR (1) NOT NULL, `boots` VARCHAR (1) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0)");
+				"`chest` VARCHAR (1) NOT NULL, `legs` VARCHAR (1) NOT NULL, `boots` VARCHAR (1) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0, `amount` INT (16) NOT NULL)");
 
 		//Log of dungeon runs
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +

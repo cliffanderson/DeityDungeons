@@ -112,7 +112,7 @@ public class RunningDungeon {
 			//Player is close enough to win
 
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Congratulations! You have completed the dungeon <yellow>" + dungeon.getName()+ "<green>!");
-			
+
 			//is player active in the dungeon?
 			if(players.contains(player)) {
 				//remove them from the list so they only get the message once
@@ -134,25 +134,37 @@ public class RunningDungeon {
 
 			//See if they are close enough
 			if(mobDistance <= DeityDungeons.MOB_SPAWN_DISTANCE) {
-				//Spawn the mob
-				Entity entity = dungeon.getWorld().spawnEntity(mob.getLocation(), mob.getType());
-				if(mob.getTarget()) ((Creature) entity).setTarget(player);
+				//Spawn the mob(s)
+				for(int i = 0; i < mob.getAmount(); i++) {
+					
+					Entity entity = dungeon.getWorld().spawnEntity(mob.getLocation(), mob.getType());
+					if(mob.getTarget()) ((Creature) entity).setTarget(player);
 
-				EntityEquipment equip = ((LivingEntity) entity).getEquipment();
-				equip.setHelmet(new ItemStack(mob.getHelm() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
-				equip.setChestplate(new ItemStack(mob.getChest() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getChest().getName() + "_CHESTPLATE")));
-				equip.setLeggings(new ItemStack(mob.getPants() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getPants().getName() + "_LEGGINGS")));
-				equip.setBoots(new ItemStack(mob.getFeet() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getFeet().getName() + "_BOOTS"))); 
-				
-				if(mob.getHealth() > 0) {
-					((Damageable)entity).setMaxHealth(mob.getHealth());
-					((Damageable)entity).setHealth(mob.getHealth());
+					EntityEquipment equip = ((LivingEntity) entity).getEquipment();
+					equip.setHelmet(new ItemStack(mob.getHelm() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
+					equip.setChestplate(new ItemStack(mob.getChest() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getChest().getName() + "_CHESTPLATE")));
+					equip.setLeggings(new ItemStack(mob.getPants() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getPants().getName() + "_LEGGINGS")));
+					equip.setBoots(new ItemStack(mob.getFeet() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getFeet().getName() + "_BOOTS"))); 
+					
+					//disabling armor drops
+					equip.setHelmetDropChance(0);
+					equip.setChestplateDropChance(0);
+					equip.setLeggingsDropChance(0);
+					equip.setBootsDropChance(0);
+
+
+					if(mob.getHealth() > 0) {
+						((Damageable)entity).setMaxHealth(mob.getHealth());
+						((Damageable)entity).setHealth(mob.getHealth());
+					}
+
+					entities.add(entity);
 				}
 				
 				mobsToBeSpawned.remove(mob);
-				entities.add(entity);
+
 			}
-			
+
 			//prevents concurrent modification exception
 			break;
 

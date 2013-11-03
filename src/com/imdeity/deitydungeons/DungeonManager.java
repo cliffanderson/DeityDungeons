@@ -106,9 +106,13 @@ public class DungeonManager {
 						int moby = mobResults.getInteger(i, "y");
 						int mobz = mobResults.getInteger(i, "z");
 						boolean target = mobResults.getInteger(i, "target") == 0 ? false : true;
+						int amount = mobResults.getInteger(i, "amount");
+						System.out.println();
+						
 
-						Mob mob = new Mob(mobid, type, health, ArmorMaterial.getByChar(helm.charAt(0)), ArmorMaterial.getByChar(chest.charAt(0)), ArmorMaterial.getByChar(pants.charAt(0)), ArmorMaterial.getByChar(feet.charAt(0)), getDungeonByID(dungeonID), mobx, moby, mobz, target);
+						Mob mob = new Mob(mobid, type, health, ArmorMaterial.getByChar(helm.charAt(0)), ArmorMaterial.getByChar(chest.charAt(0)), ArmorMaterial.getByChar(pants.charAt(0)), ArmorMaterial.getByChar(feet.charAt(0)), getDungeonByID(dungeonID), mobx, moby, mobz, target, amount);
 
+						System.out.println("loaded amount: " + amount);
 						//Add the mob to the dungeon
 						getDungeonByID(dungeonID).addMob(mob);
 
@@ -169,11 +173,13 @@ public class DungeonManager {
 		int dungeonID = 0;
 
 		//see if there is a row in the table, if there is set the dungeonID
-		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_list` ORDER BY `id` LIMIT 1");
+		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_list` ORDER BY `id` DESC LIMIT 1");
 
 		if(results != null && results.hasRows()) {
 			try {
 				dungeonID = results.getInteger(0, "id") + 1;
+				System.out.println("dungeon id of newly created dungeon: " + dungeonID);
+				System.out.println("dungeonid: " + dungeonID);
 			} catch (SQLDataException e) {
 				DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "There was an SQL error while creating a dungeon");
 				e.printStackTrace();
@@ -186,11 +192,11 @@ public class DungeonManager {
 				name, player.getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
 
 
-		//add to mem
-		Dungeon dungeon = new Dungeon(dungeonID, name, player.getWorld(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), (int)player.getLocation().getYaw(), (int)player.getLocation().getPitch(), -1, -1, -1);
-		dungeons.put(name, dungeon);
-
-		selectedDungeons.put(player, dungeon);
+		//reload all dungeons
+		loadAllDungeons();
+		
+		//memory for player
+		selectedDungeons.put(player, getDungeonByName(name));
 	}
 
 	//Creates a mob for a dungeon
@@ -198,8 +204,8 @@ public class DungeonManager {
 	//dungeon object in memory
 	public static void addMobToDungeon(Mob mob) {
 		//sql
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				mob.getDungeon().getID(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm().getChar(), mob.getChest().getChar(), mob.getPants().getChar(), mob.getFeet().getChar());
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`, `amount`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+				mob.getDungeon().getID(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm().getChar(), mob.getChest().getChar(), mob.getPants().getChar(), mob.getFeet().getChar(), mob.getAmount());
 
 		//for dungeon in memory
 		mob.getDungeon().addMob(mob);

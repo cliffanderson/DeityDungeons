@@ -6,7 +6,7 @@ import org.bukkit.entity.EntityType;
 
 public class Mob {
 	EntityType type;
-	int id, health, x, y, z;
+	int id, health, x, y, z, amount;
 	ArmorMaterial helm, chest, pants, feet;
 	Dungeon dungeon;
 	Location location;
@@ -16,7 +16,7 @@ public class Mob {
 	//False be default
 	boolean target;
 	
-	public Mob(int id, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target) {
+	public Mob(int id, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target, int amount) {
 		this.id = id;
 		this.type = type;
 		this.health = health;
@@ -34,6 +34,12 @@ public class Mob {
 		location = new Location(world, x, y, z);
 		
 		this.target = target;
+		
+		this.amount = amount;
+	}
+	
+	public int getAmount() {
+		return amount;
 	}
 	
 	public int getID() {
