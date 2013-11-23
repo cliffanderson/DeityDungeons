@@ -37,10 +37,10 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 			Dungeon dungeon = DungeonManager.getDungeonByName(args[0]);
 			Mob mob = dungeon.getMobByID(Integer.parseInt(args[1]));
 
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[2].charAt(0)), ArmorPiece.HELMET);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[3].charAt(0)), ArmorPiece.CHESTPLATE);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[4].charAt(0)), ArmorPiece.LEGGINGS);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[5].charAt(0)), ArmorPiece.BOOTS);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[2].toUpperCase().charAt(0)), ArmorPiece.HELMET);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[3].toUpperCase().charAt(0)), ArmorPiece.CHESTPLATE);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[4].toUpperCase().charAt(0)), ArmorPiece.LEGGINGS);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[5].toUpperCase().charAt(0)), ArmorPiece.BOOTS);
 
 			DungeonManager.setMobHealth(mob, Integer.parseInt(args[6]));
 
@@ -71,10 +71,10 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 			Dungeon dungeon = DungeonManager.getPlayersDungeon(player);
 			Mob mob = dungeon.getMobByID(Integer.parseInt(args[0]));
 
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[1].charAt(0)), ArmorPiece.HELMET);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[2].charAt(0)), ArmorPiece.CHESTPLATE);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[3].charAt(0)), ArmorPiece.LEGGINGS);
-			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[4].charAt(0)), ArmorPiece.BOOTS);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[1].toUpperCase().charAt(0)), ArmorPiece.HELMET);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[2].toUpperCase().charAt(0)), ArmorPiece.CHESTPLATE);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[3].toUpperCase().charAt(0)), ArmorPiece.LEGGINGS);
+			DungeonManager.setMobArmor(mob, ArmorMaterial.getByChar(args[4].toUpperCase().charAt(0)), ArmorPiece.BOOTS);
 
 			DungeonManager.setMobHealth(mob, Integer.parseInt(args[5]));
 

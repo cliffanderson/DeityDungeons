@@ -36,20 +36,10 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 
 
 		//get next mob id
-		//default 1 as all mysql auto increment columns start at 1
-		int id = 1;
-
-		//see if there is a row in the table, if there is set the dungeonID
-		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_info` ORDER BY `id` DESC LIMIT 1");
-
-		if(results != null && results.hasRows()) {
-			try {
-				id = results.getInteger(0, "id") + 1;
-			} catch (SQLDataException e) {
-				DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "There was an SQL error while adding a mob to a dungeon");
-				e.printStackTrace();
-			}
-		}
+		//temporarily default to 1
+		//after the mob row is inserted, we will update with the correct id
+		//safe to use 0 as auto_increment always starts at 1
+		int id = 0;
 
 
 		if(DungeonManager.dungeonExists(args[0]) && EntityType.fromName(args[1]) != null) {
@@ -63,6 +53,8 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 
 
 				DungeonManager.addMobToDungeon(mob);
+				
+				mob.setID(getID());
 
 				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Your requested mobs were added to the dungeon");
 				return true;
@@ -75,6 +67,8 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 
 
 				DungeonManager.addMobToDungeon(mob);
+				
+				mob.setID(getID());
 
 
 				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Your requested mobs were added to the dungeon");
@@ -96,6 +90,8 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			if(args.length == 1) { //dungeon addmob zombie 
 
 				DungeonManager.addMobToDungeon(mob);
+				
+				mob.setID(getID());
 
 				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Your requested mobs were added to the dungeon");
 				return true;
@@ -106,6 +102,8 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 				mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, Integer.parseInt(args[1]));
 
 				DungeonManager.addMobToDungeon(mob);
+				
+				mob.setID(getID());
 
 
 				DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Your requested mobs were added to the dungeon");
@@ -120,5 +118,27 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			DeityAPI.getAPI().getChatAPI().sendPlayerError(player, "DeityDungeons", "Usage: /dungeon addmob [dungeon] <type> [amount]");
 			return true;
 		}
+	}
+	
+	//When we make this query there will always be at least one row in the table
+	private int getID() {
+		int id = 1;
+
+		//see if there is a row in the table, if there is set the dungeonID
+		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_info` ORDER BY `id` DESC LIMIT 1");
+
+		if(results != null && results.hasRows()) {
+			try {
+				id = results.getInteger(0, "id") + 1; //this is the highest id, we will add 1 and set the id of the mob we just created to this
+				return id;
+			} catch (SQLDataException e) {
+				DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "There was an SQL error while adding a mob to a dungeon");
+				e.printStackTrace();
+				
+			}
+		} 
+		
+		return id;	
+		
 	}
 }

@@ -38,8 +38,13 @@ public class Mob {
 		this.amount = amount;
 	}
 	
+	
 	public int getAmount() {
 		return amount;
+	}
+	
+	public void setID(int id) {
+		this.id = id;
 	}
 	
 	public int getID() {
