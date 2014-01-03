@@ -268,7 +268,7 @@ public class DungeonManager {
 	public static void setMobTarget(Mob mob, boolean target) {
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `target`=? WHERE `id`=?", target, mob.getID());
 
-		mob.setTarget(target);
+		mob.setShouldTarget(target);
 	}
 
 	//Used to check if a player has a selected dungeon

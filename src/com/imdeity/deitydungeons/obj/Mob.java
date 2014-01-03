@@ -135,11 +135,11 @@ public class Mob {
 		this.dungeon = dungeon;
 	}
 	
-	public boolean getTarget() {
+	public boolean shouldTarget() {
 		return target;
 	}
 	
-	public void setTarget(boolean target) {
+	public void setShouldTarget(boolean target) {
 		this.target = target;
 	}
 }
