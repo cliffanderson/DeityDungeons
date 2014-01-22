@@ -1,6 +1,7 @@
 package com.imdeity.deitydungeons.obj;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 
@@ -16,7 +17,9 @@ public class Mob {
 	//False be default
 	boolean target;
 	
-	public Mob(int id, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target, int amount) {
+	Material weapon;
+	
+	public Mob(int id, EntityType type, int health, ArmorMaterial helm, ArmorMaterial chest, ArmorMaterial pants, ArmorMaterial feet, Dungeon dungeon, int x, int y, int z, boolean target, int amount, Material weapon) {
 		this.id = id;
 		this.type = type;
 		this.health = health;
@@ -36,9 +39,18 @@ public class Mob {
 		this.target = target;
 		
 		this.amount = amount;
+		
+		this.weapon = weapon;
 	}
 	
+	public Material getWeapon() {
+		return this.weapon;
+	}
 	
+	public void setWeapon(Material weapon) {
+		this.weapon = weapon;
+	}
+		
 	public int getAmount() {
 		return amount;
 	}

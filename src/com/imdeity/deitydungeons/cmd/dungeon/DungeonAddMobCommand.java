@@ -2,6 +2,7 @@ package com.imdeity.deitydungeons.cmd.dungeon;
 
 import java.sql.SQLDataException;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -47,7 +48,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			EntityType type = EntityType.fromName(args[1]);
 
 
-			Mob mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, 1);
+			Mob mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, 1, Material.AIR);
 
 			if(args.length == 2) { //dungeon addmob dungeon zombie
 
@@ -63,7 +64,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			}else if(args.length == 3 && DeityDungeons.isInt(args[2])) { //dungeon addmob dungeon zombie 5
 
 
-				mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, Integer.parseInt(args[2]));
+				mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, Integer.parseInt(args[2]), Material.AIR);
 
 
 				DungeonManager.addMobToDungeon(mob);
@@ -85,7 +86,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			EntityType type = EntityType.fromName(args[0]);
 
 
-			Mob mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, 1);
+			Mob mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, 1, Material.AIR);
 
 			if(args.length == 1) { //dungeon addmob zombie 
 
@@ -99,7 +100,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 			}else if(args.length == 2 && DeityDungeons.isInt(args[1])) { //dungeon addmob zombie 5
 
 
-				mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, Integer.parseInt(args[1]));
+				mob = new Mob(id, type, 0, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, ArmorMaterial.AIR, dungeon, player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), false, Integer.parseInt(args[1]), Material.AIR);
 
 				DungeonManager.addMobToDungeon(mob);
 				

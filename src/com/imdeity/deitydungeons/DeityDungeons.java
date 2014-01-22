@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import com.imdeity.deityapi.DeityAPI;
@@ -30,6 +31,9 @@ public class DeityDungeons extends DeityPlugin {
 	
 	//The distance a player must be from a mob for it to spawn
 	public static int MOB_SPAWN_DISTANCE;
+	
+	//chest-adder 'wand'
+	public static Material CHEST_WANT = Material.GOLD_SWORD;
 
 	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
 		return runningDungeons;
@@ -88,12 +92,18 @@ public class DeityDungeons extends DeityPlugin {
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, " +
 				"`type` VARCHAR (32) NOT NULL, `health` INT (16) NOT NULL," +
 				"`x` INT (16) NOT NULL, `y` INT (16) NOT NULL, `z` INT (16) NOT NULL, `helm` VARCHAR (1) NOT NULL, " +
-				"`chest` VARCHAR (1) NOT NULL, `legs` VARCHAR (1) NOT NULL, `boots` VARCHAR (1) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0, `amount` INT (16) NOT NULL)");
+				"`chest` VARCHAR (1) NOT NULL, `legs` VARCHAR (1) NOT NULL, `boots` VARCHAR (1) NOT NULL, `target` INT (1) NOT NULL DEFAULT 0,"
+				+ "`amount` INT (16) NOT NULL, `weapon` INT (16) NOT NULL)");
 
 		//Log of dungeon runs
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `dungeon_log` (" +
 				"`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, `dungeon_id` INT (16) NOT NULL, `players` TEXT NOT NULL, " +
 				"`start` TIMESTAMP NOT NULL, `end` TIMESTAMP NOT NULL)");	
+		
+		//Chest info
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `chest_info` (`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+				+ "`dungeon_id` INT (16) NOT NULL, `chest_x` INT (16) NOT NULL,`chest_y` INT (16) NOT NULL, `chest_z` INT (16) NOT NULL, "
+				+ "`inventory_slot` INT (16) NOT NULL, `item_id` INT (16) NOT NULL, `amount` INT (16) NOT NULL)");
 
 		DungeonManager.loadAllDungeons();
 	}

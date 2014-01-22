@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
@@ -121,8 +120,6 @@ public class RunningDungeon {
 			}
 			Cloud.playerFinishedDungeon(player, dungeon.getID());
 		}
-		
-		
 
 		//maybe we have to spawn a mob
 		for(Mob mob : mobsToBeSpawned) {
@@ -134,8 +131,6 @@ public class RunningDungeon {
 
 			//Distance from player
 			int mobDistance = (int) p1.distance(m);
-
-			System.out.println("Checking: " + mob.getType().name());
 			
 			//See if they are close enough
 			if(mobDistance <= DeityDungeons.MOB_SPAWN_DISTANCE) {
@@ -166,12 +161,18 @@ public class RunningDungeon {
 							((Damageable)entity).setMaxHealth(mob.getHealth());
 							((Damageable)entity).setHealth(mob.getHealth());
 						}
+						
+						//add weapon if there is one
+						if(mob.getWeapon() != Material.AIR) {
+							equip.setItemInHand(new ItemStack(mob.getWeapon()));
+							//don't drop it
+							equip.setItemInHandDropChance(0);
+						}
 					}
 
 					entities.add(entity);
 				}
 
-				System.out.println("Removing: " + mob.getType().name());
 				mobsToBeSpawned.remove(mob);
 				
 				//we've spawned a mob, done for this loop

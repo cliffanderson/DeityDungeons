@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -107,12 +108,17 @@ public class DungeonManager {
 						int mobz = mobResults.getInteger(i, "z");
 						boolean target = mobResults.getInteger(i, "target") == 0 ? false : true;
 						int amount = mobResults.getInteger(i, "amount");
-						System.out.println();
+						int weaponID = mobResults.getInteger(i, "weapon");
+						Material weapon = Material.getMaterial(weaponID);
 						
+						if(weapon == null) {
+							DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Loaded a mob with id " + mobid + " with null weapon with id " + weaponID + "...mob will not be loaded");
+							continue;
+						}						
 
-						Mob mob = new Mob(mobid, type, health, ArmorMaterial.getByChar(helm.charAt(0)), ArmorMaterial.getByChar(chest.charAt(0)), ArmorMaterial.getByChar(pants.charAt(0)), ArmorMaterial.getByChar(feet.charAt(0)), getDungeonByID(dungeonID), mobx, moby, mobz, target, amount);
+						Mob mob = new Mob(mobid, type, health, ArmorMaterial.getByChar(helm.charAt(0)), ArmorMaterial.getByChar(chest.charAt(0)), ArmorMaterial.getByChar(pants.charAt(0)), ArmorMaterial.getByChar(feet.charAt(0)), getDungeonByID(dungeonID), mobx, moby, mobz, target, amount, weapon);
 
-						System.out.println("loaded amount: " + amount);
+						//System.out.println("loaded amount: " + amount);
 						//Add the mob to the dungeon
 						getDungeonByID(dungeonID).addMob(mob);
 
@@ -204,8 +210,8 @@ public class DungeonManager {
 	//dungeon object in memory
 	public static void addMobToDungeon(Mob mob) {
 		//sql
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`, `amount`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-				mob.getDungeon().getID(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm().getChar(), mob.getChest().getChar(), mob.getPants().getChar(), mob.getFeet().getChar(), mob.getAmount());
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `dungeon_info` (`dungeon_id`, `type`, `health`, `x`, `y`, `z`, `helm`, `chest`, `legs`, `boots`, `amount`, `weapon`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+				mob.getDungeon().getID(), mob.getType().getName(), mob.getHealth(), mob.getX(), mob.getY(), mob.getZ(), mob.getHelm().getChar(), mob.getChest().getChar(), mob.getPants().getChar(), mob.getFeet().getChar(), mob.getAmount(), mob.getWeapon().getId());
 
 		//for dungeon in memory
 		mob.getDungeon().addMob(mob);
@@ -269,6 +275,13 @@ public class DungeonManager {
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `target`=? WHERE `id`=?", target, mob.getID());
 
 		mob.setShouldTarget(target);
+	}
+	
+	public static void setMobWeapon(Mob mob, int id) {
+		System.out.println("Writing to db...");
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `weapon`=? WHERE `id`=?", id, mob.getID());
+		
+		mob.setWeapon(Material.getMaterial(id));
 	}
 
 	//Used to check if a player has a selected dungeon
