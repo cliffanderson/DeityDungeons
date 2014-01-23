@@ -11,6 +11,8 @@ import com.imdeity.deitydungeons.cmd.dungeon.DungeonSelectCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonSetFinishCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonStartCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonStopCommand;
+import com.imdeity.deitydungeons.cmd.dungeon.DungeonWarpCommand;
+import com.imdeity.deitydungeons.cmd.dungeon.DungeonWarpFinishCommand;
 
 public class DungeonCommandHandler extends DeityCommandHandler {
 
@@ -30,5 +32,8 @@ public class DungeonCommandHandler extends DeityCommandHandler {
 		this.registerCommand("delete", new String[]{}, "<dungeon name>", "DELETES an entire dungeon, including all of the mobs", new DungeonDeleteCommand(), "dungeon.delete");
 		this.registerCommand("stop", new String[]{"s"}, "<dungeon name>", "Stops a dungeon", new DungeonStopCommand(), "dungeon.stop");
 		this.registerCommand("editmob", new String[]{}, "<dungeon> <mobid> <helm> <chest> <legs> <boots> <health> <type> <target>", "Edits all of the attributes of a mob", new DungeonEditMobCommand(), "dungeon.editmob");
+		this.registerCommand("warp", new String[]{"w"}, "<dungeon name>", "Warps to a dungeon", new DungeonWarpCommand(), "dungeon.warp");
+		this.registerCommand("warpfinish", new String[]{"wf"}, "<dungeon name>", "Warps to a dungeon's finish", new DungeonWarpFinishCommand(), "dungeon.warpfinish");
+	
 	}
 }
