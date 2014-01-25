@@ -32,9 +32,8 @@ public class DeityDungeons extends DeityPlugin {
 	//The distance a player must be from a mob for it to spawn
 	public static int MOB_SPAWN_DISTANCE;
 	
-	//chest-adder 'wand'
-	public static Material CHEST_WANT = Material.GOLD_SWORD;
-
+	public static boolean dropCommandUsed = false;
+	
 	public static synchronized ArrayList<RunningDungeon> getRunningDungeons() {
 		return runningDungeons;
 	}
