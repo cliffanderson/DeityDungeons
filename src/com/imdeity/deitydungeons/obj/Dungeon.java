@@ -1,9 +1,12 @@
 package com.imdeity.deitydungeons.obj;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 
 import com.imdeity.deityapi.DeityAPI;
 
@@ -11,6 +14,7 @@ import com.imdeity.deityapi.DeityAPI;
 public class Dungeon {
 	
 	public ArrayList<Mob> mobs = new ArrayList<Mob>();
+	public Map<Location, ArrayList<ItemStack>> items;
 	
 	int dungeonID;
 	String name;
@@ -23,12 +27,17 @@ public class Dungeon {
 	Location location;
 	Location finish;
 	
-	public Dungeon(int dungeonID, String name, World world, int x, int y, int z, int yaw, int pitch, int fx, int fy, int fz) {
+	public Dungeon(int dungeonID, String name, World world, int x, int y, int z, int yaw, int pitch, int fx, int fy, int fz, HashMap<Location, ArrayList<ItemStack>> items) {
 		this.dungeonID = dungeonID;
 		this.name = name;
 		this.world = world;
-		location = new Location(world, x, y, z, yaw, pitch);
-		finish = new Location(world, fx, fy, fz);
+		this.location = new Location(world, x, y, z, yaw, pitch);
+		this.finish = new Location(world, fx, fy, fz);
+		this.items = items;
+	}
+
+	public Map<Location,ArrayList<ItemStack>> getItems() {
+		return this.items;
 	}
 	
 	public Location getSpawn() {

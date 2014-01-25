@@ -8,10 +8,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.records.DatabaseResults;
@@ -42,6 +45,7 @@ public class DungeonManager {
 		//All database queries
 		DatabaseResults results = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_list`");
 		DatabaseResults mobResults = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `dungeon_info`");
+		DatabaseResults chestResults = DeityAPI.getAPI().getDataAPI().getMySQL().readEnhanced("SELECT * FROM `chest_info`");
 
 		//Load all dungeon names into an arraylist
 		if(results != null && results.hasRows()) {
@@ -72,7 +76,8 @@ public class DungeonManager {
 					int fy = results.getInteger(i, "finish_y");
 					int fz = results.getInteger(i, "finish_z");
 
-					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, world, x, y, z, yaw, pitch, fx, fy, fz);
+					//include an empty map, it will be set later
+					Dungeon dungeon = new Dungeon(dungeonID, dungeonName, world, x, y, z, yaw, pitch, fx, fy, fz, new HashMap<Location, ArrayList<ItemStack>>());
 					dungeons.put(dungeonName, dungeon);
 
 					DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Dungeon " + dungeonName + " loaded");
@@ -88,7 +93,7 @@ public class DungeonManager {
 				for(int i = 0; i < mobResults.rowCount(); i++) {
 					try {
 						int dungeonID = mobResults.getInteger(i, "dungeon_id");
-						
+
 						if(getDungeonByID(dungeonID) == null) {
 							//Dungeon with that id does not exist
 							DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "The dungeon with dungeon ID " + dungeonID + " does not exist");
@@ -110,7 +115,7 @@ public class DungeonManager {
 						int amount = mobResults.getInteger(i, "amount");
 						int weaponID = mobResults.getInteger(i, "weapon");
 						Material weapon = Material.getMaterial(weaponID);
-						
+
 						if(weapon == null) {
 							DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "Loaded a mob with id " + mobid + " with null weapon with id " + weaponID + "...mob will not be loaded");
 							continue;
@@ -124,6 +129,43 @@ public class DungeonManager {
 
 					}catch(SQLException e) {
 						DeityAPI.getAPI().getChatAPI().outSevere("DeityDungeons", "There was an SQLException while loading a mob: ");
+						e.printStackTrace();
+					}
+				}
+			}
+
+			if(chestResults != null && chestResults.hasRows()) {				
+				for(int i = 0; i < chestResults.rowCount(); i++) {
+					try {
+						int dungeonID = chestResults.getInteger(i, "dungeon_id");
+						
+						if(getDungeonByID(dungeonID) == null) {
+							//Dungeon with that id does not exist
+							DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "The dungeon with dungeon ID " + dungeonID + " does not exist");
+							continue;
+						}
+						
+						Dungeon dungeon = getDungeonByID(dungeonID);
+						
+						int chestX = chestResults.getInteger(i, "chest_x");
+						int chestY = chestResults.getInteger(i, "chest_y");
+						int chestZ = chestResults.getInteger(i, "chest_z");
+						
+						int itemID = chestResults.getInteger(i, "item_id");
+						int amount = chestResults.getInteger(i, "amount");
+						
+						Location l = new Location(dungeon.getWorld(), chestX, chestY, chestZ);
+						
+						if(dungeon.getItems().containsKey(l)) {
+							dungeon.getItems().get(l).add(new ItemStack(Material.getMaterial(itemID), amount));
+						}else{
+							dungeon.getItems().put(l, new ArrayList<ItemStack>());
+							dungeon.getItems().get(l).add(new ItemStack(Material.getMaterial(itemID), amount));
+						}
+						
+
+					}catch(SQLException e) {
+						DeityAPI.getAPI().getChatAPI().outSevere("DeityDungeons", "There was an SQLException while loading a chest: ");
 						e.printStackTrace();
 					}
 				}
@@ -200,7 +242,7 @@ public class DungeonManager {
 
 		//reload all dungeons
 		loadAllDungeons();
-		
+
 		//memory for player
 		selectedDungeons.put(player, getDungeonByName(name));
 	}
@@ -276,11 +318,11 @@ public class DungeonManager {
 
 		mob.setShouldTarget(target);
 	}
-	
+
 	public static void setMobWeapon(Mob mob, int id) {
 		System.out.println("Writing to db...");
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("UPDATE `dungeon_info` SET `weapon`=? WHERE `id`=?", id, mob.getID());
-		
+
 		mob.setWeapon(Material.getMaterial(id));
 	}
 
@@ -288,7 +330,7 @@ public class DungeonManager {
 	public static boolean playerHasDungeon(Player player) {
 		return getPlayersDungeon(player) != null;
 	}
-	
+
 	//If a player is CURRENTLY running a dungeon, and has not finished yet
 	public static boolean playerIsRunningDungeon(Player player) {
 		for(RunningDungeon d : DeityDungeons.getRunningDungeons()) {
@@ -297,7 +339,7 @@ public class DungeonManager {
 
 		return false;
 	}
-	
+
 	//gets the dungeon that a player was a part of, regardless is they have finished or not
 	public static RunningDungeon getPlayersRunningDungeon(Player player) {
 		for(RunningDungeon d : DeityDungeons.getRunningDungeons()) {
@@ -305,20 +347,44 @@ public class DungeonManager {
 				return d;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public static void endDungeon(RunningDungeon running) {
 		//kill all living mobs
 		running.removeAllMobs();
-		
+
 		//"end" dungeon
 		DeityDungeons.getRunningDungeons().remove(running);
 		DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
-		
+
 		//add record in database
 		addDungeonRunRecord(running.getDungeon(), running.getStart(), running.getOriginalPlayers());
+		
+		resupplyChests(running.getDungeon());
+	}
+	
+	public static void resupplyChests(Dungeon dungeon) {
+		//resupply all chests in the dungeon because it has finished
+		//first, clear all the chests no matter what is in them
+		for(Location l : dungeon.getItems().keySet()) {
+			//for each location get the chest and clear it
+			Chest c = (Chest) dungeon.getWorld().getBlockAt(l).getState();
+			//clear the inventory
+			c.getBlockInventory().clear();
+			
+			
+			//get the items for the chest
+			ArrayList<ItemStack> items = dungeon.getItems().get(l);
+			
+			//put them back in
+			for(ItemStack i : items) {
+				c.getBlockInventory().addItem(i);
+			}
+		}
+		
+		
 	}
 
 	public static void addDungeonRunRecord(Dungeon dungeon, Date start, ArrayList<Player> players) {
@@ -350,7 +416,7 @@ public class DungeonManager {
 
 		DeityDungeons.getRunningDungeons().add(new RunningDungeon(dungeon, players));
 		DeityDungeons.getRunningDungeonNames().add(dungeon.getName());
-	
+
 		Cloud.onDungeonStart(players, dungeon.getID());
 	}
 
@@ -363,5 +429,17 @@ public class DungeonManager {
 
 		//sql dungeon info (mob list)
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE FROM `dungeon_info` WHERE `dungeon_id`=?", dungeon.getID());	
+	}
+
+	//adds chest contents to the database
+	public static void addChest(Dungeon dungeon, Player player, Chest chest, ItemStack[] items) {
+		//first clear the database of records at this chest
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE * FROM `chest_info` WHERE `chest_x`=? AND `chest_y`=? AND `chest_z`=?", chest.getX(), chest.getY(), chest.getZ());
+
+		//now input all the new values
+		for(ItemStack i : items) {
+			DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `chest_info` (`dungeon_id`, `chest_x`, `chest_y`, `chest_z`, `item_id`, `amount`) VALUES (?, ?, ?, ?, ?, ?)",
+					dungeon.getID(), chest.getX(), chest.getY(), chest.getZ(), i.getType().getId(), i.getAmount());
+		}
 	}
 }

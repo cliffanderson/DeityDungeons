@@ -1,6 +1,7 @@
 package com.imdeity.deitydungeons.cmd;
 
 import com.imdeity.deityapi.api.DeityCommandHandler;
+import com.imdeity.deitydungeons.cmd.dungeon.DungeonAddChestCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonAddMobCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonCreateCommand;
 import com.imdeity.deitydungeons.cmd.dungeon.DungeonDeleteCommand;
@@ -34,6 +35,6 @@ public class DungeonCommandHandler extends DeityCommandHandler {
 		this.registerCommand("editmob", new String[]{}, "<dungeon> <mobid> <helm> <chest> <legs> <boots> <health> <type> <target>", "Edits all of the attributes of a mob", new DungeonEditMobCommand(), "dungeon.editmob");
 		this.registerCommand("warp", new String[]{"w"}, "<dungeon name>", "Warps to a dungeon", new DungeonWarpCommand(), "dungeon.warp");
 		this.registerCommand("warpfinish", new String[]{"wf"}, "<dungeon name>", "Warps to a dungeon's finish", new DungeonWarpFinishCommand(), "dungeon.warpfinish");
-	
+		this.registerCommand("addchest", new String[]{"chest"}, "<dungeon name>", "Registers a chest", new DungeonAddChestCommand(), "dungeon.addchest");
 	}
 }

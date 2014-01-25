@@ -103,7 +103,7 @@ public class DeityDungeons extends DeityPlugin {
 		//Chest info
 		DeityAPI.getAPI().getDataAPI().getMySQL().write("CREATE TABLE IF NOT EXISTS `chest_info` (`id` INT (16) NOT NULL AUTO_INCREMENT PRIMARY KEY, "
 				+ "`dungeon_id` INT (16) NOT NULL, `chest_x` INT (16) NOT NULL,`chest_y` INT (16) NOT NULL, `chest_z` INT (16) NOT NULL, "
-				+ "`inventory_slot` INT (16) NOT NULL, `item_id` INT (16) NOT NULL, `amount` INT (16) NOT NULL)");
+				+ "`item_id` INT (16) NOT NULL, `amount` INT (16) NOT NULL)");
 
 		DungeonManager.loadAllDungeons();
 	}
