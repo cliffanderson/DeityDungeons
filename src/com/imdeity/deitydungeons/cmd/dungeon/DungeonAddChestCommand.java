@@ -36,15 +36,16 @@ public class DungeonAddChestCommand extends DeityCommandReceiver {
 
 		if(player.getTargetBlock(null, 0).getType() != Material.CHEST) {
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>You must be looking at a chest");
+			return true;
 		}
+		
 		Chest chest;
 		if(block.getState() instanceof Chest) {
 			chest = (Chest)block.getState();
 		}else{
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>Error accessing chest");
 			return true;
-		}
-		
+		}		
 		
 		ItemStack[] items = chest.getBlockInventory().getContents();
 		

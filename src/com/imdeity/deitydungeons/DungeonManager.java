@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -380,6 +381,12 @@ public class DungeonManager {
 			
 			//put them back in
 			for(ItemStack i : items) {
+				try {
+					i.getType();
+				} catch (NullPointerException e) {
+					continue;
+				}
+				
 				c.getBlockInventory().addItem(i);
 			}
 		}
@@ -434,12 +441,30 @@ public class DungeonManager {
 	//adds chest contents to the database
 	public static void addChest(Dungeon dungeon, Player player, Chest chest, ItemStack[] items) {
 		//first clear the database of records at this chest
-		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE * FROM `chest_info` WHERE `chest_x`=? AND `chest_y`=? AND `chest_z`=?", chest.getX(), chest.getY(), chest.getZ());
+		DeityAPI.getAPI().getDataAPI().getMySQL().write("DELETE FROM `chest_info` WHERE `chest_x`=? AND `chest_y`=? AND `chest_z`=?", chest.getX(), chest.getY(), chest.getZ());
 
 		//now input all the new values
 		for(ItemStack i : items) {
+			//bukkit is stupid and throws a NPE if there is no item in a slot
+			try {
+				i.getType();
+			}catch (NullPointerException e) {
+				continue;
+			}
+			
 			DeityAPI.getAPI().getDataAPI().getMySQL().write("INSERT INTO `chest_info` (`dungeon_id`, `chest_x`, `chest_y`, `chest_z`, `item_id`, `amount`) VALUES (?, ?, ?, ?, ?, ?)",
 					dungeon.getID(), chest.getX(), chest.getY(), chest.getZ(), i.getType().getId(), i.getAmount());
+			
+			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<green>Added <red>" + i.getAmount() + " <green>of <red>" + i.getType());
 		}
+		
+		//add to memory
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		
+		for(ItemStack i : items) {
+			list.add(i);
+		}
+		
+		dungeon.getItems().put(chest.getLocation(), list);
 	}
 }
