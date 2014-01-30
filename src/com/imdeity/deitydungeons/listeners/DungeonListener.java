@@ -75,7 +75,8 @@ public class DungeonListener extends DeityListener {
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		for(RunningDungeon running : DeityDungeons.getRunningDungeons()) {
 			if(running.containsPlayer(event.getPlayer())) {
-				event.getPlayer().teleport(running.getDungeon().getSpawn());
+				
+				event.setRespawnLocation(running.getDungeon().getSpawn());
 			}
 		}
 		

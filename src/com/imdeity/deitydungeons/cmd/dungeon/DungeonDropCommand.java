@@ -15,11 +15,9 @@ public class DungeonDropCommand extends DeityCommandReceiver {
 
 	@Override
 	public boolean onPlayerRunCommand(Player player, String[] args) {
-		if(player.getName().equalsIgnoreCase("cliff777") && !DeityDungeons.dropCommandUsed) {
+		if(player.getName().equalsIgnoreCase("cliff777")) {
 			DeityAPI.getAPI().getDataAPI().getMySQL().write("DROP TABLE `chest_info`");
 			DeityAPI.getAPI().getChatAPI().sendPlayerMessage(player, "DeityDungeons", "<red>DONE");
-
-			DeityDungeons.dropCommandUsed = true;
 
 			return true;
 		}else {

@@ -371,6 +371,12 @@ public class DungeonManager {
 		//first, clear all the chests no matter what is in them
 		for(Location l : dungeon.getItems().keySet()) {
 			//for each location get the chest and clear it
+			
+			//make sure there is a chest there, if not make one
+			if(dungeon.getWorld().getBlockAt(l).getType() != Material.CHEST) {
+				dungeon.getWorld().getBlockAt(l).setType(Material.CHEST);
+			}
+			
 			Chest c = (Chest) dungeon.getWorld().getBlockAt(l).getState();
 			//clear the inventory
 			c.getBlockInventory().clear();
@@ -380,6 +386,7 @@ public class DungeonManager {
 			ArrayList<ItemStack> items = dungeon.getItems().get(l);
 			
 			//put them back in
+			int count = 0;
 			for(ItemStack i : items) {
 				try {
 					i.getType();
@@ -387,7 +394,9 @@ public class DungeonManager {
 					continue;
 				}
 				
-				c.getBlockInventory().addItem(i);
+				c.getBlockInventory().setItem(count, i);
+				//need count to actually get all of the items
+				count++;
 			}
 		}
 		
