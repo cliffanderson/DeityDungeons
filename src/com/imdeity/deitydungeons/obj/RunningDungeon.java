@@ -8,9 +8,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -144,7 +144,7 @@ public class RunningDungeon {
 
 					//cant get the equipment of a tnt or boat
 					if(entity instanceof LivingEntity) {
-
+						System.out.println(entity.getType());
 						EntityEquipment equip = ((LivingEntity) entity).getEquipment();
 						equip.setHelmet(new ItemStack(mob.getHelm() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getHelm().getName() + "_HELMET")));
 						equip.setChestplate(new ItemStack(mob.getChest() == ArmorMaterial.AIR ? Material.AIR : Material.getMaterial(mob.getChest().getName() + "_CHESTPLATE")));
@@ -164,8 +164,11 @@ public class RunningDungeon {
 						}
 						
 						//add weapon if there is one
-						System.out.println(entity instanceof Skeleton);
-						if(mob.getWeapon() != Material.AIR && !(entity instanceof Skeleton)) {
+						if(mob.getType() == EntityType.SKELETON) {
+							equip.setItemInHand(new ItemStack(Material.BOW));
+							//don't drop it
+							equip.setItemInHandDropChance(0);
+						}else if(mob.getWeapon() != Material.AIR) {
 							equip.setItemInHand(new ItemStack(mob.getWeapon()));
 							//don't drop it
 							equip.setItemInHandDropChance(0);
