@@ -130,7 +130,7 @@ public class DungeonAddMobCommand extends DeityCommandReceiver {
 
 		if(results != null && results.hasRows()) {
 			try {
-				id = results.getInteger(0, "id") + 1; //this is the highest id, we will add 1 and set the id of the mob we just created to this
+				id = results.getInteger(0, "id"); //this is the highest id, and because id is auto_increment, the highest id value is what we just inserted
 				return id;
 			} catch (SQLDataException e) {
 				DeityAPI.getAPI().getChatAPI().out("DeityDungeons", "There was an SQL error while adding a mob to a dungeon");

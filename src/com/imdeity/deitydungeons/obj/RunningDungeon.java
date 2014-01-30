@@ -10,6 +10,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -163,7 +164,8 @@ public class RunningDungeon {
 						}
 						
 						//add weapon if there is one
-						if(mob.getWeapon() != Material.AIR) {
+						System.out.println(entity instanceof Skeleton);
+						if(mob.getWeapon() != Material.AIR && !(entity instanceof Skeleton)) {
 							equip.setItemInHand(new ItemStack(mob.getWeapon()));
 							//don't drop it
 							equip.setItemInHandDropChance(0);
