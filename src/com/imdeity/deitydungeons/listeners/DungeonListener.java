@@ -4,6 +4,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -17,7 +19,28 @@ import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonListener extends DeityListener {
+	
+	//HOTFIX
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		if(!event.getPlayer().isOp()) event.setCancelled(true);
+	}
 
+	@EventHandler
+	public void onEntityDamage(EntityDamageByEntityEvent event) {
+		if(!(event.getEntity() instanceof Player)) return;
+		
+		Player attacker = (Player)event.getDamager();
+		Player defender = (Player)event.getEntity();
+		
+		if(DungeonManager.playerIsRunningDungeon(attacker) &&
+			DungeonManager.playerIsRunningDungeon(defender) &&
+			DungeonManager.getPlayersRunningDungeon(attacker) == DungeonManager.getPlayersRunningDungeon(defender)) {
+			//both are running a dungeon and are in the same dungeon
+			event.setCancelled(true);
+		}
+	}
+	
 	@EventHandler
 	public void onPlayerDisconnect(PlayerQuitEvent event) {
 		if(DungeonManager.playerIsRunningDungeon(event.getPlayer())) {
