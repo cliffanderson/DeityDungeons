@@ -23,8 +23,12 @@ import com.imdeity.deitydungeons.DeityDungeons;
 public class RunningDungeon {
 	Dungeon dungeon;
 
+	//current playing players
 	ArrayList<Player> players = new ArrayList<Player>();
+	
+	//original players who started the dungeon
 	ArrayList<Player> originalPlayers = new ArrayList<Player>();
+	
 	ArrayList<Entity> entities = new ArrayList<Entity>();
 
 	ArrayList<Mob> mobsToBeSpawned = new ArrayList<Mob>();
@@ -81,6 +85,10 @@ public class RunningDungeon {
 
 	public Date getStart() {
 		return this.start;
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
 	}
 
 	public ArrayList<Player> getOriginalPlayers() {
@@ -159,8 +167,8 @@ public class RunningDungeon {
 
 
 						if(mob.getHealth() > 0) {
-							((Damageable)entity).setMaxHealth(mob.getHealth());
-							((Damageable)entity).setHealth(mob.getHealth());
+							((Damageable)entity).setMaxHealth((double)mob.getHealth());
+							((Damageable)entity).setHealth((double)mob.getHealth());
 						}
 						
 						//add weapon if there is one

@@ -31,9 +31,9 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 				DeityDungeons.isInt(args[1]) &&	//mob id
 				DungeonManager.getDungeonByName(args[0]).hasMob(Integer.parseInt(args[1])) && //mob
 				DeityDungeons.isInt(args[6]) && //health
-				EntityType.fromName(args[7]) != null && //type
-				(args[8].equalsIgnoreCase("t") || args[8].equalsIgnoreCase("f") || args[8].equalsIgnoreCase("true") || args[8].equalsIgnoreCase("false")) &&
-				DeityDungeons.isInt(args[9])){ //target 
+				EntityType.valueOf(args[7]) != null && //type
+				(args[8].equalsIgnoreCase("t") || args[8].equalsIgnoreCase("f") || args[8].equalsIgnoreCase("true") || args[8].equalsIgnoreCase("false")) && //target
+				DeityDungeons.isInt(args[9])){ //weapon id 
 
 			Dungeon dungeon = DungeonManager.getDungeonByName(args[0]);
 			Mob mob = dungeon.getMobByID(Integer.parseInt(args[1]));
@@ -68,8 +68,8 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 				DeityDungeons.isInt(args[0]) &&	//mob id
 				DungeonManager.getPlayersDungeon(player).hasMob(Integer.parseInt(args[0])) && //mob
 				DeityDungeons.isInt(args[5]) && //health
-				EntityType.fromName(args[6]) != null && //type
-				(args[7].equalsIgnoreCase("t") || args[7].equalsIgnoreCase("f") || args[7].equalsIgnoreCase("true") || args[7].equalsIgnoreCase("false")) &&
+				EntityType.valueOf(args[6]) != null && //type
+				(args[7].equalsIgnoreCase("t") || args[7].equalsIgnoreCase("f") || args[7].equalsIgnoreCase("true") || args[7].equalsIgnoreCase("false")) && //target
 				DeityDungeons.isInt(args[8])) {
 			
 			Dungeon dungeon = DungeonManager.getPlayersDungeon(player);
@@ -82,7 +82,7 @@ public class DungeonEditMobCommand extends DeityCommandReceiver {
 
 			DungeonManager.setMobHealth(mob, Integer.parseInt(args[5]));
 
-			DungeonManager.setMobType(mob, EntityType.fromName(args[6]));
+			DungeonManager.setMobType(mob, EntityType.valueOf(args[6]));
 
 			String f = args[7];
 

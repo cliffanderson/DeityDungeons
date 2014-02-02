@@ -34,6 +34,7 @@ public class DungeonStopCommand extends DeityCommandReceiver {
 				DeityDungeons.getRunningDungeons().remove(running);
 				DeityDungeons.getRunningDungeonNames().remove(running.getDungeon().getName());
 				
+				//kill all the mobs
 				for(Entity entity : running.getSpawnedEntities()) {
 					entity.remove();
 				}

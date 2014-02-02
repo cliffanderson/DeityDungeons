@@ -4,9 +4,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -19,28 +19,51 @@ import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DungeonListener extends DeityListener {
-	
-	//HOTFIX
+
 	@EventHandler
-	public void onBlockBreak(BlockBreakEvent event) {
-		if(!event.getPlayer().isOp()) event.setCancelled(true);
+	public void onEntityTeleport(EntityTeleportEvent event) {
+		if(event.getEntity() instanceof Player) {
+			if(DungeonManager.watchers.containsKey((Player)event.getEntity())){
+				for(Player p : DungeonManager.watchers.keySet()) {
+					if(p.equals((Player)event.getEntity())) {
+						//found it
+						DungeonManager.watchers.get(p).eject();
+						DungeonManager.watchers.get(p).showPlayer(p);
+						DungeonManager.watchers.remove(p);
+						return;
+					}
+				}
+			}else if(DungeonManager.watchers.values().contains((Player)event.getEntity())) {
+				for(Player p : DungeonManager.watchers.values()) {
+					if(p.equals((Player)event.getEntity())) {
+						//found it
+						p.showPlayer((Player)p.getPassenger());
+						DungeonManager.watchers.remove((Player)p.getPassenger());
+						p.eject();
+						return;
+					}
+				}
+			}else{
+				//?
+			}
+		}
 	}
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
 		if(!(event.getEntity() instanceof Player)) return;
-		
+
 		Player attacker = (Player)event.getDamager();
 		Player defender = (Player)event.getEntity();
-		
+
 		if(DungeonManager.playerIsRunningDungeon(attacker) &&
-			DungeonManager.playerIsRunningDungeon(defender) &&
-			DungeonManager.getPlayersRunningDungeon(attacker) == DungeonManager.getPlayersRunningDungeon(defender)) {
+				DungeonManager.playerIsRunningDungeon(defender) &&
+				DungeonManager.getPlayersRunningDungeon(attacker) == DungeonManager.getPlayersRunningDungeon(defender)) {
 			//both are running a dungeon and are in the same dungeon
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerDisconnect(PlayerQuitEvent event) {
 		if(DungeonManager.playerIsRunningDungeon(event.getPlayer())) {
@@ -51,7 +74,7 @@ public class DungeonListener extends DeityListener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		LivingEntity entity = event.getEntity();
-		
+
 		//Player
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
@@ -61,7 +84,7 @@ public class DungeonListener extends DeityListener {
 					break;
 				}
 			}
-		//Mob
+			//Mob
 		}else{
 			Entity e = (Entity) entity;
 			for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
@@ -69,20 +92,20 @@ public class DungeonListener extends DeityListener {
 			}
 		}
 	}	
-	
+
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 		for(RunningDungeon runningDungeon : DeityDungeons.getRunningDungeons()) {
 			if(runningDungeon.containsPlayer(event.getPlayer())) {
 				runningDungeon.handleMove(event.getPlayer(), event.getTo());
-				
+
 				//Prevents concurrent modifcation exceptions, as a move event can lead to the 
 				//end of a dungeon, this removing the dungeon from the list
 				break; 
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		for(RunningDungeon running : DeityDungeons.getRunningDungeons()) {
@@ -90,19 +113,19 @@ public class DungeonListener extends DeityListener {
 				event.getPlayer().teleport(running.getDungeon().getSpawn());
 			}
 		}
-		
+
 		Cloud.onPlayerJoin(event.getPlayer().getName());
 	}
-	
+
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		for(RunningDungeon running : DeityDungeons.getRunningDungeons()) {
 			if(running.containsPlayer(event.getPlayer())) {
-				
+
 				event.setRespawnLocation(running.getDungeon().getSpawn());
 			}
 		}
-		
+
 		Cloud.onPlayerRespawn(event.getPlayer().getName());
 	}
 }

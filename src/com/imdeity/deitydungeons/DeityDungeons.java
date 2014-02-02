@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import com.imdeity.deityapi.DeityAPI;
@@ -14,13 +13,6 @@ import com.imdeity.deitydungeons.listeners.DungeonListener;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
 public class DeityDungeons extends DeityPlugin {
-	/*
-	 * Leather
-	 * Iron
-	 * Gold
-	 * Chain
-	 * Diamond
-	 */
 
 	public static DeityDungeons plugin;
 	private static ArrayList<RunningDungeon> runningDungeons = new ArrayList<RunningDungeon>();
@@ -42,6 +34,7 @@ public class DeityDungeons extends DeityPlugin {
 
 	@Override
 	public void onDisable() {
+		//remove all mobs
 		for(RunningDungeon rd : DeityDungeons.getRunningDungeons()) {
 			for(Entity e : rd.getSpawnedEntities()) {
 				e.remove();
