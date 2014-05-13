@@ -21,35 +21,6 @@ import com.imdeity.deitydungeons.obj.RunningDungeon;
 public class DungeonListener extends DeityListener {
 
 	@EventHandler
-	public void onEntityTeleport(EntityTeleportEvent event) {
-		if(event.getEntity() instanceof Player) {
-			if(DungeonManager.watchers.containsKey((Player)event.getEntity())){
-				for(Player p : DungeonManager.watchers.keySet()) {
-					if(p.equals((Player)event.getEntity())) {
-						//found it
-						DungeonManager.watchers.get(p).eject();
-						DungeonManager.watchers.get(p).showPlayer(p);
-						DungeonManager.watchers.remove(p);
-						return;
-					}
-				}
-			}else if(DungeonManager.watchers.values().contains((Player)event.getEntity())) {
-				for(Player p : DungeonManager.watchers.values()) {
-					if(p.equals((Player)event.getEntity())) {
-						//found it
-						p.showPlayer((Player)p.getPassenger());
-						DungeonManager.watchers.remove((Player)p.getPassenger());
-						p.eject();
-						return;
-					}
-				}
-			}else{
-				//?
-			}
-		}
-	}
-
-	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent event) {
 		if(!(event.getEntity() instanceof Player)) return;
 

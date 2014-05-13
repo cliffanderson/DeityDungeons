@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -33,9 +32,6 @@ public class DungeonManager {
 	//Map of selected dungeons for each player
 	public static Map<Player, Dungeon> selectedDungeons;
 	
-	//map of admins riding players <Admin, Fighter>
-	public static Map<Player, Player> watchers = new HashMap<Player, Player>();
-
 	//Loads all dungeons into memory from database
 	public static void loadAllDungeons() {
 		//Define maps so same method can be used for reloading dungeons
