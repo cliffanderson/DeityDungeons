@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityCommandReceiver;
-import com.imdeity.deitydungeons.DeityDungeons;
 
 public class DungeonDropCommand extends DeityCommandReceiver {
 

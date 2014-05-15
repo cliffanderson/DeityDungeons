@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import com.imdeity.deityapi.DeityAPI;
 import com.imdeity.deityapi.api.DeityCommandReceiver;
 import com.imdeity.deitydungeons.DeityDungeons;
-import com.imdeity.deitydungeons.DungeonManager;
 
 public class DungeonRideCommand extends DeityCommandReceiver {
 
