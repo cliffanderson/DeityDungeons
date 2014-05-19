@@ -11,6 +11,7 @@ import com.imdeity.deityapi.api.DeityCommandReceiver;
 import com.imdeity.deitydungeons.DungeonManager;
 import com.imdeity.deitydungeons.obj.Dungeon;
 
+@SuppressWarnings("deprecation")
 public class DungeonAddChestCommand extends DeityCommandReceiver {
 
 	@Override

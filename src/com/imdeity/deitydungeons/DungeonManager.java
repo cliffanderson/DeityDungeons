@@ -24,6 +24,7 @@ import com.imdeity.deitydungeons.obj.Dungeon;
 import com.imdeity.deitydungeons.obj.Mob;
 import com.imdeity.deitydungeons.obj.RunningDungeon;
 
+@SuppressWarnings("deprecation")
 public class DungeonManager {
 
 	//Main storage of all dungeons

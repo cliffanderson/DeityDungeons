@@ -12,6 +12,7 @@ import com.imdeity.deitydungeons.obj.ArmorPiece;
 import com.imdeity.deitydungeons.obj.Dungeon;
 import com.imdeity.deitydungeons.obj.Mob;
 
+@SuppressWarnings("deprecation")
 public class DungeonEditMobCommand extends DeityCommandReceiver {
 
 	@Override
